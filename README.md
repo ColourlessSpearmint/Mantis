@@ -34,7 +34,7 @@ This project is a digital emulator and neural network agent for the card game [M
   <img src="images\card_backs_transparent.png" alt="Card Types" width="600">
 </div>
 
-### Input Layer: 
+### Input Layer
 
 (7 x 4) + (1 x 4) + 3 = 35
 
@@ -42,13 +42,13 @@ This project is a digital emulator and neural network agent for the card game [M
 - 1 node per player for the number of cards in their Score Pile.
 - 3 nodes for the potential colors of the card on the Draw Pile.
 
-### Hidden Layers: 
+### Hidden Layers
 
 64 x 2 = 128
 
 - 64 neurons per layer; 2 layers
 
-### Output Layer: 
+### Output Layer
 
 1 x 4 = 4
 
