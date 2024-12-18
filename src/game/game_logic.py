@@ -135,13 +135,6 @@ class MantisGame:
         elif action == "steal":
             self.steal_action(player_index, target_index, card_color)
 
-        winner = self.check_gameover()
-        if winner == None:
-            self.new_card()
-            self.print_state()            
-        else:
-            print(f"Congratulations! {self.playernames[winner]} won!")
-
     def score_action(self, player_index, card_color):
         """
         Perform the score action for the current player.
