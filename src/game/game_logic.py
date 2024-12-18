@@ -39,6 +39,9 @@ class MantisGame:
         """
         Resets the game state to an initial random state.
         """
+        # Reset game state
+        self.state = [0] * (7 * 4 + 4 + 3 + 1)
+
         # Reset player tanks and scores
         for player in range(4):
             for i in range(4): # Deal 4 random cards
@@ -46,7 +49,7 @@ class MantisGame:
                 self.state[state_index] += 1
             self.state[player * 8 + 7] = 0  # Reset score to 0
 
-        # Generate a new deck card
+        # Generate new card actual and possibilities
         self.new_card()
 
     def convert_color(self, color_index, format="plain"):
@@ -95,6 +98,76 @@ class MantisGame:
         if self.debug:
             ansi_code = self.convert_color(self.state[-1], "ansi")
             print(f"(Debug Mode) Actual Card Color: {ansi_code}#\033[0m")
+    
+    def take_turn(self, player_index, target_index=None):
+        """
+        Executes a turn in the game.
+        
+        Args:
+            player_index (int): The index of the current player (0-3).
+            target_index (int): The index of the target player (0-3).
+
+        Returns:
+            None
+        """
+        # Validate inputs
+        assert target_index is not None and target_index < 4, \
+            "Invalid target player."
+
+        # Determine action based on target_index
+        action = "score" if target_index == player_index else "steal"
+
+        # Extract the deck colors
+        card_color = self.state[-1]
+
+        if action == "score":
+            self.score_action(player_index, card_color)
+        elif action == "steal":
+            self.steal_action(player_index, target_index, card_color)
+
+        self.new_card()
+        self.print_state()
+
+    def score_action(self, player_index, card_color):
+        """
+        Perform the score action for the current player.
+
+        Args:
+            player_index (int): Index of the current player'.
+            card_color (int): The color of the top card.
+
+        Returns:
+            None
+        """
+        tank_index = player_index*8 + card_color - 1
+        tank_quantity = self.state[tank_index]
+        if tank_quantity > 0:
+            cards_to_score = tank_quantity + 1 # Add one to include the new card
+            self.state[tank_index] = 0  # Remove cards from tank
+            self.state[player_index*8 + 7] += cards_to_score  # Add to score pile
+        else:
+            self.state[tank_index] = 1 # If the player does not have that card, give it to them
+
+    def steal_action(self, player_index, target_index, card_color):
+        """
+        Perform the steal action from the current player to the target player.
+
+        Args:
+            player_index (int): Index of the current player.
+            target_index (int): Index of the target player.
+            card_color (int): The color of the top card.
+
+        Returns:
+            None
+        """
+        target_tank_index = target_index*8 + card_color - 1
+        target_tank_quantity = self.state[target_tank_index]
+        if target_tank_quantity > 0:
+            cards_to_steal = target_tank_quantity + 1 # Add one to include the new card
+            self.state[target_tank_index] = 0  # Remove cards from target's tank
+            self.state[player_index*8 + card_color - 1] += cards_to_steal  # Add to current player's tank
+        else:
+            self.state[target_tank_index] = 1 # If the target does not have that card, give it to them
 
 # Example Usage
 if __name__ == "__main__":
