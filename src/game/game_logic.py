@@ -17,10 +17,12 @@ class MantisGame:
     dp1,dp2,dp3,da]
     """
 
-    def __init__(self, debug=False):
+    def __init__(self):
         # Initialize the state with zeros
         self.state = [0] * (7 * 4 + 4 + 3 + 1)
-        self.debug = debug
+        self.goal = 10
+        self.debug = False
+        self.playernames = ["Player Zero", "Player One", "Player Two", "Player Three"]
 
     def generate_card(self):
         """
@@ -98,6 +100,12 @@ class MantisGame:
         if self.debug:
             ansi_code = self.convert_color(self.state[-1], "ansi")
             print(f"(Debug Mode) Actual Card Color: {ansi_code}#\033[0m")
+
+    def check_gameover(self):
+        for player_index in range(4):
+            if self.state[player_index*8+7] >= self.goal:
+                return player_index
+        return None
     
     def take_turn(self, player_index, target_index=None):
         """
@@ -125,8 +133,12 @@ class MantisGame:
         elif action == "steal":
             self.steal_action(player_index, target_index, card_color)
 
-        self.new_card()
-        self.print_state()
+        winner = self.check_gameover()
+        if winner == None:
+            self.new_card()
+            self.print_state()            
+        else:
+            print(f"Congratulations! {self.playernames[winner]} won!")
 
     def score_action(self, player_index, card_color):
         """
@@ -171,6 +183,7 @@ class MantisGame:
 
 # Example Usage
 if __name__ == "__main__":
-    game = MantisGame(debug=True)
+    game = MantisGame()
+    game.debug = True
     game.reset_state()
     game.print_state()
