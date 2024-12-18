@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">
+<h1 align="center">
   <img src="images/mantis_logo_transparent.png" alt="Mantis Logo" width="350">
 </h1>
 
@@ -6,7 +6,7 @@ This project is a digital emulator and neural network agent for the card game [M
 
 ## Planned Features/Roadmap
 
-<div style="text-align: center;">
+<div align="center">
   <img src="images\card_types_transparent.png" alt="Card Types" width="600">
 </div>
 
@@ -30,7 +30,7 @@ This project is a digital emulator and neural network agent for the card game [M
 
 ## Network Architecture
 
-<div style="text-align: center;">
+<div align="center">
   <img src="images\card_backs_transparent.png" alt="Card Types" width="600">
 </div>
 
@@ -56,7 +56,7 @@ This project is a digital emulator and neural network agent for the card game [M
 
 ## Usage
 
-<div style="text-align: center;">
+<div align="center">
   <img src="images\mantis_gameplay_transparent.png" alt="Card Types" width="600">
 </div>
 
@@ -96,6 +96,6 @@ This project is licensed under the [Apache 2.0 License](https://www.apache.org/l
 
 Images used in this project are sourced from the official [Mantis website](https://www.explodingkittens.com/products/mantis) and are used for decorative purposes only.
 
-<div style="text-align: center;">
+<div align="center">
   <img src="images\mantis_shrimp_transparent.png" alt="Card Types" width="300">
 </div>
