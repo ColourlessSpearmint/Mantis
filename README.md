@@ -1,8 +1,14 @@
-# Mantis
+<h1 style="text-align: center;">
+  <img src="images/mantis_logo_transparent.png" alt="Mantis Logo" width="350">
+</h1>
 
 This project is a digital emulator and neural network agent for the card game [Mantis](https://www.explodingkittens.com/products/mantis).
 
 ## Planned Features/Roadmap
+
+<div style="text-align: center;">
+  <img src="images\card_types_transparent.png" alt="Card Types" width="600">
+</div>
 
 ### Stuff I know how to do
 
@@ -23,6 +29,10 @@ This project is a digital emulator and neural network agent for the card game [M
 - &#10006; **Integrate Model into Notebook**: Integrate trained model to playable notebook
 
 ## Network Architecture
+
+<div style="text-align: center;">
+  <img src="images\card_backs_transparent.png" alt="Card Types" width="600">
+</div>
 
 ### Input Layer: 
 
@@ -45,6 +55,10 @@ This project is a digital emulator and neural network agent for the card game [M
 - 1 node per player
 
 ## Usage
+
+<div style="text-align: center;">
+  <img src="images\mantis_gameplay_transparent.png" alt="Card Types" width="600">
+</div>
 
 ### Play
 
@@ -81,3 +95,7 @@ This project is licensed under the [Apache 2.0 License](https://www.apache.org/l
 ## Credits
 
 Images used in this project are sourced from the official [Mantis website](https://www.explodingkittens.com/products/mantis) and are used for decorative purposes only.
+
+<div style="text-align: center;">
+  <img src="images\mantis_shrimp_transparent.png" alt="Card Types" width="300">
+</div>
