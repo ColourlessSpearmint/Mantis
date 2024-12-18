@@ -109,6 +109,15 @@ class MantisGame:
                 return player_index
         return None
     
+    def reveal_card(self):
+        """
+        Prints the actual card color with colored text.
+        """
+        actual_color = self.state[-1]
+        ansi_code = self.convert_color(actual_color, "ansi")
+        color_name = self.convert_color(actual_color, "plain")
+        print(f"Actual Card Color: {ansi_code}{color_name}\033[0m")
+
     def take_turn(self, player_index, target_index=None):
         """
         Executes a turn in the game.
