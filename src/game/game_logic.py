@@ -87,8 +87,10 @@ class MantisGame:
             print(f"Player {player_index}: ", end="")
             for color_map_index in range(1,8):
                 color_state_index = color_map_index-1+(player_index*8)
+                color_quantity = self.state[color_state_index]
                 ansi_code = self.convert_color(color_map_index, "ansi")
-                print(f"{ansi_code}{self.state[color_state_index]}\033[0m", end=', ')
+                if color_quantity is not 0:
+                    print(f"{ansi_code}{color_quantity}\033[0m", end=', ')
             print(f"Score: {self.state[player_index*8+7]}")
 
         print("Possible Card Colors: ", end='')
