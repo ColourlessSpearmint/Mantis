@@ -1,2 +1,5 @@
 # Ignore Visual Studio Code folders
 .vscode/
+
+# Ignore Python bytecode files
+*.pyc
