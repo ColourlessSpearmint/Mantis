@@ -1,4 +1,4 @@
-from game import MantisGame
+from game_logic import MantisGame
 import random
 
 class MatcherBot:
@@ -74,3 +74,28 @@ class RandomBot:
     def turn(self, game, self_index):
         target_index = random.randint(0, 3)
         game.take_turn(self_index, target_index)
+
+if __name__ == "__main__":
+    game = MantisGame()
+    game.debug = True
+    game.reset_state()
+    game.print_state()
+
+    rounds = 5
+    p0 = MatcherBot()
+    p1 = ScorerBot()
+    p2 = ThiefBot()
+    p3 = RandomBot()
+    for i in range(rounds):
+        p0.turn(game, 0)
+        game.new_card()
+        game.print_state()
+        p1.turn(game, 1)
+        game.new_card()
+        game.print_state()
+        p2.turn(game, 2)
+        game.new_card()
+        game.print_state()
+        p3.turn(game, 3)
+        game.new_card()
+        game.print_state()
