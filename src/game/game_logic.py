@@ -1,5 +1,6 @@
 import random
 
+
 class MantisGame:
     """
     Game State Encoding:
@@ -46,8 +47,8 @@ class MantisGame:
 
         # Reset player tanks and scores
         for player in range(4):
-            for i in range(4): # Deal 4 random cards
-                state_index = random.randint(0,7)+(player*8)
+            for i in range(4):  # Deal 4 random cards
+                state_index = random.randint(0, 7) + (player * 8)
                 self.state[state_index] += 1
             self.state[player * 8 + 7] = 0  # Reset score to 0
 
@@ -65,7 +66,7 @@ class MantisGame:
         Returns:
             The color name or ANSI escape code corresponding to the index, or "Unknown" if the index is invalid.
         """
-        
+
         color_map = {
             1: ("Red", "\033[31m"),
             2: ("Orange", "\033[38;5;208m"),
@@ -73,30 +74,30 @@ class MantisGame:
             4: ("Green", "\033[32m"),
             5: ("Blue", "\033[34m"),
             6: ("Purple", "\033[35m"),
-            7: ("Pink", "\033[1;35m")
+            7: ("Pink", "\033[1;35m"),
         }
 
         color_info = color_map.get(color_index, ("Unknown", ""))
-        return (color_info[0] if format == "plain" else color_info[1])
-    
+        return color_info[0] if format == "plain" else color_info[1]
+
     def print_state(self):
         """
         Prints the game state as a human-readable format
         """
         for player_index in range(4):
             print(f"Player {player_index}: ", end="")
-            for color_map_index in range(1,8):
-                color_state_index = color_map_index-1+(player_index*8)
+            for color_map_index in range(1, 8):
+                color_state_index = color_map_index - 1 + (player_index * 8)
                 color_quantity = self.state[color_state_index]
                 ansi_code = self.convert_color(color_map_index, "ansi")
-                if color_quantity is not 0:
-                    print(f"{ansi_code}{color_quantity}\033[0m", end=', ')
+                if color_quantity != 0:
+                    print(f"{ansi_code}{color_quantity}\033[0m", end=", ")
             print(f"Score: {self.state[player_index*8+7]}")
 
-        print("Possible Card Colors: ", end='')
+        print("Possible Card Colors: ", end="")
         for card_index in self.state[-4:-1]:
             ansi_code = self.convert_color(card_index, "ansi")
-            print(f"{ansi_code}#\033[0m ", end='')
+            print(f"{ansi_code}#\033[0m ", end="")
         print()
 
         if self.debug:
@@ -105,10 +106,10 @@ class MantisGame:
 
     def check_gameover(self):
         for player_index in range(4):
-            if self.state[player_index*8+7] >= self.goal:
+            if self.state[player_index * 8 + 7] >= self.goal:
                 return player_index
         return None
-    
+
     def reveal_card(self):
         """
         Prints the actual card color with colored text.
@@ -120,7 +121,7 @@ class MantisGame:
     def take_turn(self, player_index, target_index=None):
         """
         Executes a turn in the game.
-        
+
         Args:
             player_index (int): The index of the current player (0-3).
             target_index (int): The index of the target player (0-3).
@@ -129,8 +130,7 @@ class MantisGame:
             None
         """
         # Validate inputs
-        assert target_index is not None and target_index < 4, \
-            "Invalid target player."
+        assert target_index is not None and target_index < 4, "Invalid target player."
 
         # Determine action based on target_index
         action = "score" if target_index == player_index else "steal"
@@ -154,14 +154,16 @@ class MantisGame:
         Returns:
             None
         """
-        tank_index = player_index*8 + card_color - 1
+        tank_index = player_index * 8 + card_color - 1
         tank_quantity = self.state[tank_index]
         if tank_quantity > 0:
-            cards_to_score = tank_quantity + 1 # Add one to include the new card
+            cards_to_score = tank_quantity + 1  # Add one to include the new card
             self.state[tank_index] = 0  # Remove cards from tank
-            self.state[player_index*8 + 7] += cards_to_score  # Add to score pile
+            self.state[player_index * 8 + 7] += cards_to_score  # Add to score pile
         else:
-            self.state[tank_index] = 1 # If the player does not have that card, give it to them
+            self.state[tank_index] = (
+                1  # If the player does not have that card, give it to them
+            )
 
     def steal_action(self, player_index, target_index, card_color):
         """
@@ -175,14 +177,19 @@ class MantisGame:
         Returns:
             None
         """
-        target_tank_index = target_index*8 + card_color - 1
+        target_tank_index = target_index * 8 + card_color - 1
         target_tank_quantity = self.state[target_tank_index]
         if target_tank_quantity > 0:
-            cards_to_steal = target_tank_quantity + 1 # Add one to include the new card
+            cards_to_steal = target_tank_quantity + 1  # Add one to include the new card
             self.state[target_tank_index] = 0  # Remove cards from target's tank
-            self.state[player_index*8 + card_color - 1] += cards_to_steal  # Add to current player's tank
+            self.state[
+                player_index * 8 + card_color - 1
+            ] += cards_to_steal  # Add to current player's tank
         else:
-            self.state[target_tank_index] = 1 # If the target does not have that card, give it to them
+            self.state[target_tank_index] = (
+                1  # If the target does not have that card, give it to them
+            )
+
 
 # Example Usage
 if __name__ == "__main__":
