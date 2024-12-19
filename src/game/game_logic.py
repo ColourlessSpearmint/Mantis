@@ -24,6 +24,14 @@ class MantisGame:
         self.goal = 10
         self.debug = False
         self.playernames = ["Player Zero", "Player One", "Player Two", "Player Three"]
+        self.players = ["manual", "manual", "manual", "manual"]
+
+    def set_player(self, player_index, player=None):
+        if player == None:
+            player = "manual"
+        self.players[player_index] = player
+        if player.name:
+            self.playernames[player_index] = player.name
 
     def generate_card(self):
         """
@@ -85,7 +93,7 @@ class MantisGame:
         Prints the game state as a human-readable format
         """
         for player_index in range(4):
-            print(f"Player {player_index}: ", end="")
+            print(f"{self.playernames[player_index]}: ", end="")
             for color_map_index in range(1, 8):
                 color_state_index = color_map_index - 1 + (player_index * 8)
                 color_quantity = self.state[color_state_index]
@@ -118,9 +126,9 @@ class MantisGame:
         ansi_code = self.convert_color(actual_color, "ansi")
         print(f"Actual Card Color: {ansi_code}#\033[0m")
 
-    def take_turn(self, player_index, target_index=None):
+    def action(self, player_index, target_index=None, verbose=True):
         """
-        Executes a turn in the game.
+        Performs an action from one player to another.
 
         Args:
             player_index (int): The index of the current player (0-3).
@@ -135,8 +143,8 @@ class MantisGame:
         # Determine action based on target_index
         action = "score" if target_index == player_index else "steal"
 
-        if self.debug == True:
-            print(f"{self.playernames[player_index]} is performing action \'{action}\' on {self.playernames[target_index]}")
+        if verbose:
+            print(f"{self.playernames[player_index]} ({player_index}) performed action \'{action}\'{f' on {self.playernames[target_index]} ({target_index})' if action=='steal' else ''}.")
         # Extract the card color
         card_color = self.state[-1]
 
@@ -192,11 +200,25 @@ class MantisGame:
                 1  # If the target does not have that card, give it to them
             )
 
+    def simulate_turn(self, player_index, manual_target_index=None, verbose=True):
+        """
+        Simulates one turn.
+        """
+
+        player = self.players[player_index]
+        if player == "manual":
+            assert manual_target_index != None # If the player is under manual control, it must specify a target
+            target_index = manual_target_index
+        else:
+            target_index = player.turn(self, player_index)
+        self.action(player_index, target_index, verbose)
+        self.new_card()
+        if verbose:
+            self.print_state()
 
 # Example Usage
 if __name__ == "__main__":
     game = MantisGame()
-    game.debug = False
+    game.debug = True
     game.reset_state()
     game.print_state()
-    game.reveal_card()

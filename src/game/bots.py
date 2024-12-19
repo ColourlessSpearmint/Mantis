@@ -5,8 +5,10 @@ class MatcherBot:
     """
     Strategy: Matcher
     - Chooses the player (including itself) who has the largest number of matching cards.
-    - Uses the quantity of matching cards as a tiebreaker.
     """
+    def __init__(self):
+        self.name = "MatcherBot"
+
     def turn(self, game, self_index):
         max_cards = 0
         target_index = self_index
@@ -18,7 +20,7 @@ class MatcherBot:
                 max_cards = card_count
                 target_index = player_index
         
-        game.take_turn(self_index, target_index)
+        return target_index
 
 class ScorerBot:
     """
@@ -26,12 +28,15 @@ class ScorerBot:
     - Scores if it has ANY of the colors on the draw pile.
     - Steals from the player with the most matching colors otherwise.
     """
+    def __init__(self):
+        self.name = "ScorerBot"
+
     def turn(self, game, self_index):
         card_possibilities = game.state[-4:-1]
         self_card_count = sum(game.state[self_index * 8 + color - 1] for color in card_possibilities)
         
         if self_card_count > 0:
-            game.take_turn(self_index, self_index)
+            return self_index
         else:
             max_cards = 0
             target_index = self_index
@@ -41,7 +46,7 @@ class ScorerBot:
                     if card_count > max_cards:
                         max_cards = card_count
                         target_index = player_index
-            game.take_turn(self_index, target_index)
+            return target_index
 
 class ThiefBot:
     """
@@ -49,12 +54,15 @@ class ThiefBot:
     - Scores if it has ALL of the colors on the draw pile.
     - Steals from the player with the most matching colors otherwise.
     """
+    def __init__(self):
+        self.name = "ThiefBot"
+
     def turn(self, game, self_index):
         card_possibilities = game.state[-4:-1]
         self_card_count = sum(game.state[self_index * 8 + color - 1] for color in card_possibilities)
         
         if self_card_count == len(card_possibilities):
-            game.take_turn(self_index, self_index)
+            return self_index
         else:
             max_cards = 0
             target_index = self_index
@@ -64,38 +72,42 @@ class ThiefBot:
                     if card_count > max_cards:
                         max_cards = card_count
                         target_index = player_index
-            game.take_turn(self_index, target_index)
+            return target_index
 
 class RandomBot:
     """
     Strategy: Random
     - Chooses a random player (including itself) for each decision.
     """
+    def __init__(self):
+        self.name = "RandomBot"
+
     def turn(self, game, self_index):
         target_index = random.randint(0, 3)
-        game.take_turn(self_index, target_index)
+        return target_index
+
+def bot_duel(verbose=True):
+    import time
+    game = MantisGame()
+    game.reset_state()
+    if verbose:
+        game.print_state()
+
+    game.set_player(0, MatcherBot())
+    game.set_player(1, ScorerBot())
+    game.set_player(2, ThiefBot())
+    game.set_player(3, RandomBot())
+
+    current_player = 0
+    while game.check_gameover() == None:
+        game.simulate_turn(current_player % 4, verbose=verbose)
+        print()
+        time.sleep(1)
+        current_player +=1
+    winner = game.check_gameover()
+    if verbose:
+        print(f"\n{game.playernames[winner]} won in {current_player} turns.")
+    return winner, current_player
 
 if __name__ == "__main__":
-    game = MantisGame()
-    game.debug = True
-    game.reset_state()
-    game.print_state()
-
-    rounds = 5
-    p0 = MatcherBot()
-    p1 = ScorerBot()
-    p2 = ThiefBot()
-    p3 = RandomBot()
-    for i in range(rounds):
-        p0.turn(game, 0)
-        game.new_card()
-        game.print_state()
-        p1.turn(game, 1)
-        game.new_card()
-        game.print_state()
-        p2.turn(game, 2)
-        game.new_card()
-        game.print_state()
-        p3.turn(game, 3)
-        game.new_card()
-        game.print_state()
+    bot_duel()
