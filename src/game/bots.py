@@ -1,0 +1,76 @@
+from game import MantisGame
+import random
+
+class MatcherBot:
+    """
+    Strategy: Matcher
+    - Chooses the player (including itself) who has the largest number of matching cards.
+    - Uses the quantity of matching cards as a tiebreaker.
+    """
+    def turn(self, game, self_index):
+        max_cards = 0
+        target_index = self_index
+        card_possibilities = game.state[-4:-1]
+        
+        for player_index in range(4):
+            card_count = sum(game.state[player_index * 8 + color - 1] for color in card_possibilities)
+            if card_count > max_cards:
+                max_cards = card_count
+                target_index = player_index
+        
+        game.take_turn(self_index, target_index)
+
+class ScorerBot:
+    """
+    Strategy: Scorer
+    - Scores if it has ANY of the colors on the draw pile.
+    - Steals from the player with the most matching colors otherwise.
+    """
+    def turn(self, game, self_index):
+        card_possibilities = game.state[-4:-1]
+        self_card_count = sum(game.state[self_index * 8 + color - 1] for color in card_possibilities)
+        
+        if self_card_count > 0:
+            game.take_turn(self_index, self_index)
+        else:
+            max_cards = 0
+            target_index = self_index
+            for player_index in range(4):
+                if player_index != self_index:
+                    card_count = sum(game.state[player_index * 8 + color - 1] for color in card_possibilities)
+                    if card_count > max_cards:
+                        max_cards = card_count
+                        target_index = player_index
+            game.take_turn(self_index, target_index)
+
+class ThiefBot:
+    """
+    Strategy: Thief
+    - Scores if it has ALL of the colors on the draw pile.
+    - Steals from the player with the most matching colors otherwise.
+    """
+    def turn(self, game, self_index):
+        card_possibilities = game.state[-4:-1]
+        self_card_count = sum(game.state[self_index * 8 + color - 1] for color in card_possibilities)
+        
+        if self_card_count == len(card_possibilities):
+            game.take_turn(self_index, self_index)
+        else:
+            max_cards = 0
+            target_index = self_index
+            for player_index in range(4):
+                if player_index != self_index:
+                    card_count = sum(game.state[player_index * 8 + color - 1] for color in card_possibilities)
+                    if card_count > max_cards:
+                        max_cards = card_count
+                        target_index = player_index
+            game.take_turn(self_index, target_index)
+
+class RandomBot:
+    """
+    Strategy: Random
+    - Chooses a random player (including itself) for each decision.
+    """
+    def turn(self, game, self_index):
+        target_index = random.randint(0, 3)
+        game.take_turn(self_index, target_index)
