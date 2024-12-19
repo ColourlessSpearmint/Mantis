@@ -135,7 +135,9 @@ class MantisGame:
         # Determine action based on target_index
         action = "score" if target_index == player_index else "steal"
 
-        # Extract the deck colors
+        if self.debug == True:
+            print(f"{self.playernames[player_index]} is performing action \'{action}\' on {self.playernames[target_index]}")
+        # Extract the card color
         card_color = self.state[-1]
 
         if action == "score":
