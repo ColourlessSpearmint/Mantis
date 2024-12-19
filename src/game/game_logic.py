@@ -44,6 +44,9 @@ class MantisGame:
         return possibilies
 
     def new_card(self):
+        """
+        Generates a new card and updates the game state.
+        """
         self.state[-4:] = self.generate_card()
 
     def reset_state(self):
@@ -113,6 +116,12 @@ class MantisGame:
             print(f"(Debug Mode) Actual Card Color: {ansi_code}#\033[0m")
 
     def check_gameover(self):
+        """
+        Checks if any player has reached the goal score.
+
+        Returns:
+            The index of the winning player, or None if no player has won yet.
+        """
         for player_index in range(4):
             if self.state[player_index * 8 + 7] >= self.goal:
                 return player_index
@@ -202,9 +211,16 @@ class MantisGame:
 
     def simulate_turn(self, player_index, manual_target_index=None, verbose=True):
         """
-        Simulates one turn.
-        """
+        Simulates one turn for the specified player.
 
+        Args:
+            player_index (int): The index of the current player (0-3).
+            manual_target_index (int, optional): The index of the target player (0-3) if the player is manual.
+            verbose (bool): Whether to print the state after the turn.
+
+        Returns:
+            None
+        """
         player = self.players[player_index]
         if player == "manual":
             assert manual_target_index != None # If the player is under manual control, it must specify a target
