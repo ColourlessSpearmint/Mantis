@@ -24,7 +24,8 @@ This project is a digital emulator and neural network agent for the card game [M
 - &#10006; **Tests**: Tests to verify game mechanic implementation is functional.
 - &#10006; **Implement Neural Network Architecture**: Something in PyTorch; I dunno.
 - &#10006; **Training Method**: PyTorch implementation of [Reinforcement Q-learning](https://en.wikipedia.org/wiki/Q-learning).
-- &#10006; **Training Environment**: Loss function, optimizer, evaluation Metrics, etc.
+- &#10006; **Training Gym**: The game environment which the neural network interacts with. 
+- &#10006; **More Neural Network Stuff**: Loss function, optimizer, evaluation metrics, etc.
 - &#10006; **Train Model**: Probably a few hours of training time on my NVIDIA GTX 1650
 - &#10006; **Integrate Model into Notebook**: Integrate trained model to playable notebook
 
@@ -64,7 +65,9 @@ This project is a digital emulator and neural network agent for the card game [M
 
 [![Open in Colab](https://img.shields.io/badge/Open%20in-Colab-blue?logo=google-colab)](https://colab.research.google.com/github/ColourlessSpearmint/Mantis/blob/main/notebooks/play_mantis.ipynb)
 
-If you just want to play Mantis (against one of my bots or playing with friends), the `play_mantis.ipynb` Jupyter notebook is the easiest option. There's a Colab badge above, or you could clone the repo and run it locally.
+If you just want to play Mantis, the `play_mantis.ipynb` Jupyter notebook is the easiest option. As of now, I only have manual control implemented, so you'll need to play all four characters or get three friends.
+
+Open the notebook in Colab (link above), or you could clone the repo and run it locally.
 
 ```bash
 git clone https://github.com/ColourlessSpearmint/Mantis.git
