@@ -89,7 +89,7 @@ README artwork and original game design by the **Exploding Kittens Team** ([Offi
 
 ## Incompetence
 
-I've never done anything like this before, so I can guarentee that I will mess up frequently. I'm doing my best to employ future-proof practices, but earlier commits will probably be a bit of a mess. I'll try and develop on `feature/` and `development` branches, only pushing stable releases to `main`, but I will probably commit to the wrong branch at some point. Sorry in advance.
+I've never done anything like this before, so I can guarentee that I will mess up frequently. I'm doing my best to employ future-proof practices, but you should expect a lot of reverts. I'll try and develop on `feature/` and `development` branches, only pushing stable releases to `main`, but I will probably commit to the wrong branch at some point. Sorry in advance.
 
 ## License
 
