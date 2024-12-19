@@ -87,7 +87,6 @@ class RandomBot:
         return target_index
 
 def bot_duel(verbose=True):
-    import time
     game = MantisGame()
     game.reset_state()
     if verbose:
@@ -102,7 +101,6 @@ def bot_duel(verbose=True):
     while game.check_gameover() == None:
         game.simulate_turn(current_player % 4, verbose=verbose)
         print()
-        time.sleep(1)
         current_player +=1
     winner = game.check_gameover()
     if verbose:
