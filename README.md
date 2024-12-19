@@ -15,7 +15,7 @@ This project is a digital emulator and neural network agent for the card game [M
 - &#10004; **Project Structure**: The roadmap and file structure of the project.
 - &#10004; **Mantis Logic**: A digital emulator for Mantis, taking input from each player and updating the game state based on the the [official rules](https://cdn.shopify.com/s/files/1/0345/9180/1483/files/Copy_of_Mantis_Instructions_18NOV21.pdf?v=1709370758).
 - &#10004; **Playable Notebook**: An implementation of game logic that queries each player for their input and renders a CLI user interface based  on the game state.
-- &#10006; **Scripted Bots**: Algorithmic bots that employ a simple prebuilt strategy and act as players.
+- &#10004; **Scripted Bots**: Algorithmic bots that employ a simple prebuilt strategy and act as players.
 - &#10006; **Bot Integration**: Integrate scripted bots into playable notebook.
 - &#10004; **Plan Neural Network Architecture**: Inputs, hidden layers, and outputs of the neural network.
 
