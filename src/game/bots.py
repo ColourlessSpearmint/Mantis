@@ -115,7 +115,7 @@ def bot_duel(verbose=True):
         verbose (bool): Whether to print the state after each turn.
 
     Returns:
-        winner (int): The index of the player that won the match.
+        winner (int): The index of the winning player.
         turns (int): The number of turns that elapsed in the game.
     """
     game = MantisGame()
@@ -134,9 +134,10 @@ def bot_duel(verbose=True):
         game.simulate_turn(turns % 4, verbose=verbose)
         turns += 1
     winner = game.check_gameover()
+    state = game.state
     if verbose:
         print(f"\n{game.playernames[winner]} won in {turns} turns.")
-    return winner, turns
+    return winner, turns, state
 
 
 if __name__ == "__main__":
