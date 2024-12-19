@@ -108,6 +108,16 @@ class RandomBot:
 
 
 def bot_duel(verbose=True):
+    """
+    Simulates a game of Mantis between the four prebuilt bots
+
+    Args:
+        verbose (bool): Whether to print the state after each turn.
+
+    Returns:
+        winner (int): The index of the player that won the match.
+        turns (int): The number of turns that elapsed in the game.
+    """
     game = MantisGame()
     game.reset_state()
     if verbose:
@@ -118,15 +128,15 @@ def bot_duel(verbose=True):
     game.set_player(2, ThiefBot())
     game.set_player(3, RandomBot())
 
-    current_player = 0
+    turns = 0
     while game.check_gameover() == None:
         print()
-        game.simulate_turn(current_player % 4, verbose=verbose)
-        current_player += 1
+        game.simulate_turn(turns % 4, verbose=verbose)
+        turns += 1
     winner = game.check_gameover()
     if verbose:
-        print(f"\n{game.playernames[winner]} won in {current_player} turns.")
-    return winner, current_player
+        print(f"\n{game.playernames[winner]} won in {turns} turns.")
+    return winner, turns
 
 
 if __name__ == "__main__":
