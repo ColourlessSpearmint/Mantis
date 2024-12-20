@@ -33,34 +33,15 @@ class MatcherBot:
 class ScorerBot:
     """
     Strategy: Scorer
-    - Scores if it has ANY of the colors on the draw pile.
-    - Steals from the player with the most matching colors otherwise.
+    - Scores every turn
     """
 
     def __init__(self):
         self.name = "ScorerBot"
 
     def turn(self, game, self_index):
-        card_possibilities = game.state[-4:-1]
-        self_card_count = sum(
-            game.state[self_index * 8 + color - 1] for color in card_possibilities
-        )
-
-        if self_card_count > 0:
-            return self_index
-        else:
-            max_cards = 0
-            target_index = self_index
-            for player_index in range(4):
-                if player_index != self_index:
-                    card_count = sum(
-                        game.state[player_index * 8 + color - 1]
-                        for color in card_possibilities
-                    )
-                    if card_count > max_cards:
-                        max_cards = card_count
-                        target_index = player_index
-            return target_index
+        target_index = self_index
+        return target_index
 
 
 class ThiefBot:
