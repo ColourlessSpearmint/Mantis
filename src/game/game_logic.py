@@ -30,8 +30,10 @@ class MantisGame:
         if player == None:
             player = "manual"
         self.players[player_index] = player
-        if player.name:
+        try: 
             self.playernames[player_index] = player.name
+        except AttributeError:
+            pass
 
     def generate_card(self):
         """
