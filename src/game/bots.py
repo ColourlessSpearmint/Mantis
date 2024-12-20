@@ -136,7 +136,7 @@ def bot_duel(verbose=True):
     winner = game.check_gameover()
     state = game.state
     if verbose:
-        print(f"\n{game.playernames[winner]} won in {turns} turns.")
+        print(f"\n{game.get_playername(winner)} won in {turns} turns.")
     return winner, turns, state
 
 

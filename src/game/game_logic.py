@@ -35,6 +35,9 @@ class MantisGame:
         except AttributeError:
             pass
 
+    def get_playername(self, index):
+        return (f"{self.playernames[index]} ({index})")
+
     def generate_card(self):
         """
         Randomly generates a card's three potential colors.
@@ -98,7 +101,7 @@ class MantisGame:
         Prints the game state as a human-readable format
         """
         for player_index in range(4):
-            print(f"{self.playernames[player_index]}: ", end="")
+            print(f"{self.get_playername(player_index)}: ", end="")
             for color_map_index in range(1, 8):
                 color_state_index = color_map_index - 1 + (player_index * 8)
                 color_quantity = self.state[color_state_index]
@@ -155,7 +158,7 @@ class MantisGame:
         action = "score" if target_index == player_index else "steal"
 
         if verbose:
-            print(f"{self.playernames[player_index]} ({player_index}) performed action \'{action}\'{f' on {self.playernames[target_index]} ({target_index})' if action=='steal' else ''}.")
+            print(f"{self.get_playername(player_index)} performed action \'{action}\'{f' on {self.get_playername(target_index)}' if action=='steal' else ''}.")
         # Extract the card color
         card_color = self.state[-1]
 
