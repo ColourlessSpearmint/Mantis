@@ -1,4 +1,4 @@
-from game_logic import MantisGame
+from game import MantisGame
 import random
 
 
