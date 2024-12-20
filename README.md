@@ -16,8 +16,9 @@ This project is a digital emulator and neural network agent for the card game [M
 - &#10004; **Mantis Logic**: A digital emulator for Mantis, taking input from each player and updating the game state based on the the [official rules](https://cdn.shopify.com/s/files/1/0345/9180/1483/files/Copy_of_Mantis_Instructions_18NOV21.pdf?v=1709370758).
 - &#10004; **Playable Notebook**: An implementation of game logic that queries each player for their input and renders a CLI user interface based  on the game state.
 - &#10004; **Scripted Bots**: Algorithmic bots that employ a simple prebuilt strategy and act as players.
-- &#10006; **Bot Integration**: Integrate scripted bots into playable notebook.
+- &#10004; **Bot Integration**: Integrate scripted bots into playable notebook.
 - &#10004; **Plan Neural Network Architecture**: Inputs, hidden layers, and outputs of the neural network.
+- &#10006; **Better Interface**: A non-CLI interface that is more user-readable. Probably built with Streamlit.
 
 ### Stuff I need to figure out (expect frequent changes as I become less ignorant)
 
@@ -64,17 +65,6 @@ This project is a digital emulator and neural network agent for the card game [M
 ### Play
 
 [![Open in Colab](https://img.shields.io/badge/Open%20in-Colab-blue?logo=google-colab)](https://colab.research.google.com/github/ColourlessSpearmint/Mantis/blob/main/notebooks/play_mantis.ipynb)
-
-If you just want to play Mantis, the `play_mantis.ipynb` Jupyter notebook is the easiest option. As of now, I only have manual control implemented, so you'll need to play all four characters or get three friends.
-
-Open the notebook in Colab (link above), or you could clone the repo and run it locally.
-
-```bash
-git clone https://github.com/ColourlessSpearmint/Mantis.git
-cd Mantis
-pip install -r requirements.txt
-jupyter notebook notebooks\play_mantis.ipynb
-```
 
 ### Train
 
