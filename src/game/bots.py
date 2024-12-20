@@ -1,4 +1,7 @@
-from game import MantisGame
+try:
+    from game import MantisGame
+except ModuleNotFoundError:
+    from game_logic import MantisGame
 import random
 
 
