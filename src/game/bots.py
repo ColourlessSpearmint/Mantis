@@ -91,7 +91,7 @@ class RandomBot:
         return target_index
 
 
-def bot_duel(verbose=True):
+def bot_duel(players=[], verbose=True):
     """
     Simulates a game of Mantis between the four prebuilt bots
 
@@ -108,10 +108,10 @@ def bot_duel(verbose=True):
     if verbose:
         game.print_state()
 
-    game.set_player(0, MatcherBot())
-    game.set_player(1, ScorerBot())
-    game.set_player(2, ThiefBot())
-    game.set_player(3, RandomBot())
+    if players == []:
+        players = [MatcherBot(), ScorerBot(), ThiefBot(), RandomBot()]
+    for i in range(4):
+        game.set_player(i, players[i])
 
     turns = 0
     while game.check_gameover() == None:
