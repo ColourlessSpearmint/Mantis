@@ -91,11 +91,12 @@ class RandomBot:
         return target_index
 
 
-def bot_duel(players=[], verbose=True):
+def bot_duel(players=["default"], verbose=True):
     """
-    Simulates a game of Mantis between the four prebuilt bots
+    Simulates a game of Mantis between a specifiable sequence of bots
 
     Args:
+        players (list): Ordered list of players in the game
         verbose (bool): Whether to print the state after each turn.
 
     Returns:
@@ -103,14 +104,16 @@ def bot_duel(players=[], verbose=True):
         turns (int): The number of turns that elapsed in the game.
         state (list): the game state at the end of the game. 
     """
+    assert len(players) == 4
+
     game = MantisGame()
     game.reset_state()
     if verbose:
         game.print_state()
 
-    if players == []:
+    if players == ["default"]: # If no custom players are chosen, use the default bots
         players = [MatcherBot(), ScorerBot(), ThiefBot(), RandomBot()]
-    for i in range(4):
+    for i in range(4): 
         game.set_player(i, players[i])
 
     turns = 0
