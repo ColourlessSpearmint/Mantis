@@ -45,8 +45,9 @@ Speaking of notebooks, the next step was to integrate the bots into the playable
 
 ## December 20, 2024:
 
-### ScorerBot
+Today I did a few miscelaneous bugfixes.
 
-Why did a strategy named ScorerBot ever do anything other than score? Anyways, I fixed that. It doesn't seem to have effected ScorerBot's effectiveness; it still wins around half of all games. 
+- ScorerBot: Why did a strategy named ScorerBot ever do anything other than score? Anyways, I fixed that. It doesn't seem to have effected ScorerBot's effectiveness; it still wins around half of all games. 
+- Imports: My local machine and Colab seem to handle file imports differently, so I added some logic that tries multiple import locations. This is a stopgap solution to a problem that I'll have to find a way to permanently resolve.
 
 This was all that I had time for today.
