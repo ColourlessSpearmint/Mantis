@@ -43,11 +43,19 @@ I programmed a bot_duel function that pits all four bots against each other in a
 
 Speaking of notebooks, the next step was to integrate the bots into the playable notebook. I had to refactor basically the entire notebook to make this work, but I got it done eventually.
 
-## December 20, 2024:
+## December 20, 2024: Bugfixes
 
-Today I did a few miscelaneous bugfixes.
+Today I did a few miscellaneous bugfixes.
 
 - ScorerBot: Why did a strategy named ScorerBot ever do anything other than score? Anyways, I fixed that. It doesn't seem to have effected ScorerBot's effectiveness; it still wins around half of all games. 
 - Imports: My local machine and Colab seem to handle file imports differently, so I added some logic that tries multiple import locations. This is a stopgap solution to a problem that I'll have to find a way to permanently resolve.
 
 This was all that I had time for today.
+
+## December 21, 2024: Bot Dueling
+
+Today I made the bot duel notebook.
+
+I had started working on it yesterday, but I didn't have enough time to finish it or commit it. It calls the bot_duel() function a specifiable number of times, collects the results, and plots them with matplotlib. The map_to_bot_names() and plot_common_items() functions were written by Google Gemini. The reason I outsourced writing these menial functions to AI is that I didn't want to write them myself. Anyways, from this I learned that ScorerBot is by far the best strategy when your opponents are MatcherBot, ThiefBot, and RandomBot. 
+
+Next, I added random players to the bot duel notebook. The user specifies a pool of bots, and the script chooses a random selection during for each game. While writing this devlog, I've realized that there is a bug in my implementation. What the notebook is actually tracking and plotting is the win rates of the first, second, third, and fourth players regardless of their strategy. I don't have time to fix this today, so I might do it tomorrow.
