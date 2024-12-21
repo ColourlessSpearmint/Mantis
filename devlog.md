@@ -42,3 +42,11 @@ I decided to try out Copilot again and see if it could write the bots. It could 
 I programmed a bot_duel function that pits all four bots against each other in a simulated game. I noticed that MatcherBot and ScorerBot usually win, but RandomBot and ThiefBot also win occasionally. What's interesting is that RandomBot seems to win more often than ThiefBot. I didn't do it today, but I should definitely write a bot analytic notebook at some point to rank the bots.
 
 Speaking of notebooks, the next step was to integrate the bots into the playable notebook. I had to refactor basically the entire notebook to make this work, but I got it done eventually.
+
+## December 20, 2024:
+
+### ScorerBot
+
+Why did a strategy named ScorerBot ever do anything other than score? Anyways, I fixed that. It doesn't seem to have effected ScorerBot's effectiveness; it still wins around half of all games. 
+
+This was all that I had time for today.
