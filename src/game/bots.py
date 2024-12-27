@@ -5,6 +5,20 @@ except ModuleNotFoundError:
 import random
 
 
+def MatchPlayer(game, self_index, card_possibilities):
+    max_cards = 0
+    target_index = self_index
+    for player_index in range(4):
+        if player_index != self_index:
+            card_count = sum(
+                game.state[player_index * 8 + color - 1] for color in card_possibilities
+            )
+            if card_count > max_cards:
+                max_cards = card_count
+                target_index = player_index
+    return target_index
+
+
 class MatcherBot:
     """
     Strategy: Matcher
@@ -33,7 +47,7 @@ class MatcherBot:
 class ScorerBot:
     """
     Strategy: Scorer
-    - Scores every turn
+    - Scores every turn.
     """
 
     def __init__(self):
@@ -42,6 +56,29 @@ class ScorerBot:
     def turn(self, game, self_index):
         target_index = self_index
         return target_index
+
+
+class CertaintyBot:
+    """
+    Strategy: Certainty
+    - Scores if it has ANY of the colors on the draw pile.
+    - Steals from the player with the most matching colors otherwise.
+    """
+
+    def __init__(self):
+        self.name = "CertaintyBot"
+
+    def turn(self, game, self_index):
+        card_possibilities = game.state[-4:-1]
+        self_card_count = 0
+        for color in card_possibilities:
+            if game.state[self_index * 8 + color - 1]:
+                self_card_count += 1
+
+        if self_card_count > 0:
+            return self_index
+        else:
+            return MatchPlayer(game, self_index, card_possibilities)
 
 
 class ThiefBot:
@@ -56,25 +93,15 @@ class ThiefBot:
 
     def turn(self, game, self_index):
         card_possibilities = game.state[-4:-1]
-        self_card_count = sum(
-            game.state[self_index * 8 + color - 1] for color in card_possibilities
-        )
+        self_card_count = 0
+        for color in card_possibilities:
+            if game.state[self_index * 8 + color - 1]:
+                self_card_count += 1
 
         if self_card_count == len(card_possibilities):
             return self_index
         else:
-            max_cards = 0
-            target_index = self_index
-            for player_index in range(4):
-                if player_index != self_index:
-                    card_count = sum(
-                        game.state[player_index * 8 + color - 1]
-                        for color in card_possibilities
-                    )
-                    if card_count > max_cards:
-                        max_cards = card_count
-                        target_index = player_index
-            return target_index
+            return MatchPlayer(game, self_index, card_possibilities)
 
 
 class RandomBot:
@@ -102,7 +129,7 @@ def bot_duel(players=["default"], verbose=True):
     Returns:
         winner (int): The index of the winning player.
         turns (int): The number of turns that elapsed in the game.
-        state (list): the game state at the end of the game. 
+        state (list): the game state at the end of the game.
     """
     assert len(players) == 4
 
@@ -111,9 +138,9 @@ def bot_duel(players=["default"], verbose=True):
     if verbose:
         game.print_state()
 
-    if players == ["default"]: # If no custom players are chosen, use the default bots
+    if players == ["default"]:  # If no custom players are chosen, use the default bots
         players = [MatcherBot(), ScorerBot(), ThiefBot(), RandomBot()]
-    for i in range(4): 
+    for i in range(4):
         game.set_player(i, players[i])
 
     turns = 0
