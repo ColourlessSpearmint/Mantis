@@ -5,43 +5,34 @@ except ModuleNotFoundError:
 import random
 
 
-def MatchPlayer(game, self_index, card_possibilities):
+def MatchPlayer(game, self_index):
     max_cards = 0
-    target_index = self_index
+    target_index = self_index  # Default to scoring (in case no player has any matching colors)
+    card_possibilities = game.state[-4:-1]
+
     for player_index in range(4):
-        if player_index != self_index:
-            card_count = sum(
-                game.state[player_index * 8 + color - 1] for color in card_possibilities
-            )
-            if card_count > max_cards:
-                max_cards = card_count
-                target_index = player_index
+        card_count = 0
+        for color in card_possibilities:
+            if game.state[player_index * 8 + color - 1]:
+                card_count += 1
+        if card_count > max_cards:
+            max_cards = card_count
+            target_index = player_index
+
     return target_index
 
 
 class MatcherBot:
     """
     Strategy: Matcher
-    - Chooses the player (including itself) who has the largest number of matching cards.
+    - Chooses the player (including itself) who has the most matching colors.
     """
 
     def __init__(self):
         self.name = "MatcherBot"
 
     def turn(self, game, self_index):
-        max_cards = 0
-        target_index = self_index
-        card_possibilities = game.state[-4:-1]
-
-        for player_index in range(4):
-            card_count = sum(
-                game.state[player_index * 8 + color - 1] for color in card_possibilities
-            )
-            if card_count > max_cards:
-                max_cards = card_count
-                target_index = player_index
-
-        return target_index
+        return MatchPlayer(game, self_index)
 
 
 class ScorerBot:
@@ -62,7 +53,7 @@ class CertaintyBot:
     """
     Strategy: Certainty
     - Scores if it has ANY of the colors on the draw pile.
-    - Steals from the player with the most matching colors otherwise.
+    - Chooses the player with the most matching colors otherwise.
     """
 
     def __init__(self):
@@ -78,14 +69,14 @@ class CertaintyBot:
         if self_card_count > 0:
             return self_index
         else:
-            return MatchPlayer(game, self_index, card_possibilities)
+            return MatchPlayer(game, self_index)
 
 
 class ThiefBot:
     """
     Strategy: Thief
     - Scores if it has ALL of the colors on the draw pile.
-    - Steals from the player with the most matching colors otherwise.
+    - Chooses the player with the most matching colors otherwise.
     """
 
     def __init__(self):
@@ -101,7 +92,7 @@ class ThiefBot:
         if self_card_count == len(card_possibilities):
             return self_index
         else:
-            return MatchPlayer(game, self_index, card_possibilities)
+            return MatchPlayer(game, self_index)
 
 
 class RandomBot:
@@ -115,6 +106,33 @@ class RandomBot:
 
     def turn(self, game, self_index):
         target_index = random.randint(0, 3)
+        return target_index
+
+
+class DefenderBot:
+    """
+    Strategy: Defender
+    - Chooses the player (including itself) with the highest score, so long as they have ANY matching cards.
+    - Chooses the player with the most matching colors otherwise.
+    """
+
+    def __init__(self):
+        self.name = "DefenderBot"
+
+    def turn(self, game, self_index):
+        max_score = 0
+        target_index = MatchPlayer(game, self_index)
+        for player_index in range(4):
+            card_possibilities = game.state[-4:-1]
+            card_count = 0
+            for color in card_possibilities:
+                if game.state[player_index * 8 + color - 1]:
+                    card_count += 1
+            if card_count > 0:
+                player_score = game.state[player_index * 8 + 7]
+                if player_score > max_score:
+                    max_score = player_score
+                    target_index = player_index
         return target_index
 
 
