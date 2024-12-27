@@ -1,5 +1,5 @@
 try:
-    from game import MantisGame
+    from src import MantisGame
 except ModuleNotFoundError:
     from game_logic import MantisGame
 import random
@@ -131,7 +131,8 @@ def bot_duel(players=["default"], verbose=True):
         turns (int): The number of turns that elapsed in the game.
         state (list): the game state at the end of the game.
     """
-    assert len(players) == 4
+    if players != ["default"]:
+        assert len(players) == 4
 
     game = MantisGame()
     game.reset_state()
