@@ -8,7 +8,7 @@ import random
 def MatchPlayer(game, self_index):
     max_cards = 0
     max_quantity = 0
-    target_index = self_index  # Default to scoring (in case no player has any matching colors)
+    target_index = self_index  # Default to scoring
     card_possibilities = game.state[-4:-1]
 
     for player_index in range(4):
@@ -117,7 +117,8 @@ class RandomBot:
 class DefenderBot:
     """
     Strategy: Defender
-    - Chooses the player (including itself) with the highest score, so long as they have ANY matching cards.
+    - Chooses the player (including itself) with the highest score,
+        so long as they have ANY matching cards.
     - Chooses the player with the most matching colors otherwise.
     """
 
@@ -162,7 +163,7 @@ def bot_duel(players=["default"], verbose=True):
     if verbose:
         game.print_state()
 
-    if players == ["default"]:  # If no custom players are chosen, use the default bots
+    if players == ["default"]:
         players = [MatcherBot(), ScorerBot(), ThiefBot(), RandomBot()]
     for i in range(4):
         game.set_player(i, players[i])
