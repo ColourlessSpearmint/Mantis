@@ -5,7 +5,7 @@ except ModuleNotFoundError:
 import random
 
 
-def MatchPlayer(game, self_index):
+def MatchPlayer(game, self_index=0):
     max_cards = 0
     max_quantity = 0
     target_index = self_index  # Default to scoring

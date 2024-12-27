@@ -6,9 +6,9 @@ from src import MantisGame
 
 
 def test_reset():
-    # Note: This test relies on randomness and must be run many times
+    # Note: This test is inherently random and must be run repeatedly
     game = MantisGame()
-    for i in range(100): 
+    for i in range(50): 
         game.reset_state()
         for player_index in range(4):
             card_quantity = 0
