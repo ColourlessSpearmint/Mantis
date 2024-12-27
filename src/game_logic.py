@@ -37,11 +37,33 @@ class MantisGame:
 
     def get_playername(self, index):
         return (f"{self.playernames[index]} ({index})")
+    
+    def get_matching_count(self, player_index, return_quantity=False):
+        """
+        Counts the number of matching cards present in the provided player's hand.
+
+        Args:
+            player_index (int): the index of the player's hand to count.
+        Returns:
+            card_count (int): the number of matching cards.
+        """
+        card_count = 0
+        quantity = 0
+        card_possibilities = self.possible_cards()
+        for color in card_possibilities:
+            if game.state[player_index * 8 + color - 1]:
+                card_count += 1
+                quantity += self.state[player_index * 8 + color - 1]
+        if return_quantity:
+            return card_count
+        else:
+            return card_count, quantity
 
     def generate_card(self):
         """
         Randomly generates a card's three potential colors.
-        Returns a tuple of four integers representing the colors.
+        Returns:
+            possibilities (list): the four colors.
         """
         possibilies = random.sample(range(1, 8), 3)
         actual = random.sample(possibilies, 1)
