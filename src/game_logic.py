@@ -62,11 +62,11 @@ class MantisGame:
         self.state = [0] * (7 * 4 + 4 + 3 + 1)
 
         # Reset player tanks and scores
-        for player in range(4):
+        for player_index in range(4):
             for i in range(4):  # Deal 4 random cards
-                state_index = random.randint(0, 7) + (player * 8)
-                self.state[state_index] += 1
-            self.state[player * 8 + 7] = 0  # Reset score to 0
+                rand_color = random.randint(1, 7)
+                self.state[player_index * 8 + rand_color - 1] += 1
+            self.state[player_index * 8 + 7] = 0  # Reset score to 0
 
         # Generate new card actual and possibilities
         self.new_card()
