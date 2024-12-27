@@ -9,7 +9,7 @@ def MatchPlayer(game, self_index):
     max_cards = 0
     max_quantity = 0
     target_index = self_index  # Default to scoring
-    card_possibilities = game.state[-4:-1]
+    card_possibilities = game.possible_cards()
 
     for player_index in range(4):
         card_count = 0
@@ -65,7 +65,7 @@ class CertaintyBot:
         self.name = "CertaintyBot"
 
     def turn(self, game, self_index):
-        card_possibilities = game.state[-4:-1]
+        card_possibilities = game.possible_cards()
         self_card_count = 0
         for color in card_possibilities:
             if game.state[self_index * 8 + color - 1]:
@@ -88,7 +88,7 @@ class ThiefBot:
         self.name = "ThiefBot"
 
     def turn(self, game, self_index):
-        card_possibilities = game.state[-4:-1]
+        card_possibilities = game.possible_cards()
         self_card_count = 0
         for color in card_possibilities:
             if game.state[self_index * 8 + color - 1]:
@@ -129,7 +129,7 @@ class DefenderBot:
         max_score = 0
         target_index = MatchPlayer(game, self_index)
         for player_index in range(4):
-            card_possibilities = game.state[-4:-1]
+            card_possibilities = game.possible_cards()
             card_count = 0
             for color in card_possibilities:
                 if game.state[player_index * 8 + color - 1]:

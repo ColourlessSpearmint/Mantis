@@ -53,6 +53,12 @@ class MantisGame:
         Generates a new card and updates the game state.
         """
         self.state[-4:] = self.generate_card()
+    
+    def possible_cards(self):
+        """
+        Returns a list of the three possible colors of the next card. 
+        """
+        return self.state[-4:-1]
 
     def reset_state(self):
         """
