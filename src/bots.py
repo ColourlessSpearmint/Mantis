@@ -7,16 +7,21 @@ import random
 
 def MatchPlayer(game, self_index):
     max_cards = 0
+    max_quantity = 0
     target_index = self_index  # Default to scoring (in case no player has any matching colors)
     card_possibilities = game.state[-4:-1]
 
     for player_index in range(4):
         card_count = 0
+        quantity = 0
         for color in card_possibilities:
             if game.state[player_index * 8 + color - 1]:
                 card_count += 1
-        if card_count > max_cards:
+                quantity += game.state[player_index * 8 + color - 1]
+
+        if card_count > max_cards or (card_count == max_cards and quantity > max_quantity):
             max_cards = card_count
+            max_quantity = quantity
             target_index = player_index
 
     return target_index
