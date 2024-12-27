@@ -1,4 +1,5 @@
 import random
+import os
 
 
 class MantisGame:
@@ -58,6 +59,11 @@ class MantisGame:
             return card_count
         else:
             return card_count, quantity
+
+    def load_gamestate(self, state_index, path="gamestates.json"):
+        import json
+        with open(os.path.abspath(os.path.join('.', path)), "r") as f:
+            self.state = (json.load(f))[state_index]
 
     def generate_card(self):
         """
@@ -268,6 +274,5 @@ class MantisGame:
 # Example Usage
 if __name__ == "__main__":
     game = MantisGame()
-    game.debug = True
-    game.reset_state()
+    game.load_gamestate(3)
     game.print_state()
