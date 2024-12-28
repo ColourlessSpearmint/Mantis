@@ -54,15 +54,15 @@ class ScorerBot:
         return target_index
 
 
-class CertaintyBot:
+class MinimalistBot:
     """
-    Strategy: Certainty
+    Strategy: Minimalist
     - Scores if it has ANY of the colors on the draw pile.
     - Chooses the player with the most matching colors otherwise.
     """
 
     def __init__(self):
-        self.name = "CertaintyBot"
+        self.name = "MinimalistBot"
 
     def turn(self, game, self_index):
         card_possibilities = game.possible_cards()
@@ -77,15 +77,15 @@ class CertaintyBot:
             return MatchPlayer(game, self_index)
 
 
-class ThiefBot:
+class CollectorBot:
     """
-    Strategy: Thief
+    Strategy: Collector
     - Scores if it has ALL of the colors on the draw pile.
     - Chooses the player with the most matching colors otherwise.
     """
 
     def __init__(self):
-        self.name = "ThiefBot"
+        self.name = "CollectorBot"
 
     def turn(self, game, self_index):
         card_possibilities = game.possible_cards()
@@ -114,16 +114,16 @@ class RandomBot:
         return target_index
 
 
-class DefenderBot:
+class JealousBot:
     """
-    Strategy: Defender
+    Strategy: Jealous
     - Chooses the player (including itself) with the highest score,
         so long as they have ANY matching cards.
     - Chooses the player with the most matching colors otherwise.
     """
 
     def __init__(self):
-        self.name = "DefenderBot"
+        self.name = "JealousBot"
 
     def turn(self, game, self_index):
         max_score = 0
@@ -164,7 +164,7 @@ def bot_duel(players=["default"], verbose=True):
         game.print_state()
 
     if players == ["default"]:
-        players = [MatcherBot(), ScorerBot(), ThiefBot(), RandomBot()]
+        players = [MatcherBot(), ScorerBot(), CollectorBot(), RandomBot()]
     for i in range(4):
         game.set_player(i, players[i])
 
