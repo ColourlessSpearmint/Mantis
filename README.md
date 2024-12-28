@@ -18,16 +18,17 @@ This project is a digital emulator and neural network agent for the card game [M
 - &#10004; **Scripted Bots**: Algorithmic bots that employ a simple prebuilt strategy and act as players.
 - &#10004; **Bot Integration**: Integrate scripted bots into playable notebook.
 - &#10004; **Plan Neural Network Architecture**: Inputs, hidden layers, and outputs of the neural network.
+- &#10004; **Game Logic Tests**: Tests to verify game mechanic implementation is functional.
+- &#10004; **Bot Tests**: Tests to verify that the bots behave according to their strategies.
 - &#10006; **Better Interface**: A non-CLI interface that is more user-readable. Probably built with Streamlit.
 
-### Stuff I need to figure out (expect frequent changes as I become less ignorant)
+### Stuff I still need to figure out (expect frequent changes as I become less ignorant)
 
-- &#10006; **Tests**: Tests to verify game mechanic implementation is functional.
 - &#10006; **Implement Neural Network Architecture**: Something in PyTorch; I dunno.
 - &#10006; **Training Method**: PyTorch implementation of [Reinforcement Q-learning](https://en.wikipedia.org/wiki/Q-learning).
 - &#10006; **Training Gym**: The game environment which the neural network interacts with. 
 - &#10006; **More Neural Network Stuff**: Loss function, optimizer, evaluation metrics, etc.
-- &#10006; **Train Model**: Probably a few hours of training time on my NVIDIA GTX 1650
+- &#10006; **Train Model**: Probably a few hours of training time on my GPU (NVIDIA GTX 1650)
 - &#10006; **Integrate Model into Notebook**: Integrate trained model to playable notebook
 
 ## Network Architecture

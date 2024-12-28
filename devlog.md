@@ -59,3 +59,24 @@ Today I made the bot duel notebook.
 I had started working on it yesterday, but I didn't have enough time to finish it or commit it. It calls the bot_duel() function a specifiable number of times, collects the results, and plots them with matplotlib. The map_to_bot_names() and plot_common_items() functions were written by Google Gemini. The reason I outsourced writing these menial functions to AI is that I didn't want to write them myself. Anyways, from this I learned that ScorerBot is by far the best strategy when your opponents are MatcherBot, ThiefBot, and RandomBot. 
 
 Next, I added random players to the bot duel notebook. The user specifies a pool of bots, and the script chooses a random selection during for each game. While writing this devlog, I've realized that there is a bug in my implementation. What the notebook is actually tracking and plotting is the win rates of the first, second, third, and fourth players regardless of their strategy. I don't have time to fix this today, so I might do it tomorrow.
+
+## December 27, 2024: Debugging, More Bots, and Tests
+
+It's been a while. I was busy with Christmas-related things for most of the last week, so I didn't have much time to work on this project. The most important things I did were the bugfixes, but I also added some new bots and figured out how to add tests.
+
+### Bigfixes
+
+- Bot Duel Winner Names: Last devlog, I noticed that the bot_duel notebook isn't actually tracking the winning player, and it actually elucidated the advantage of the starting player. I fixed that by tracking the .name (sic) of the winner object rather than the winning player index.
+- CollectorBot: I've renamed this bot to CollectorBot because ThiefBot didn't make much sense. Anyways, rather than counting the number of matching cards, CollectorBot counted the quantity of matching cards. This subtle difference meant that it almost never scored, and when it did it was usually for reasons other than what its strategy dictates. I fixed this, and its strategy subsequently rose in the rankings.
+- Directory Cleanup: I've decided that the project structure suggested by ChatGPT was bad. I've collapsed src/game and moved eveything into src. Also, I removed most of the unused files (with the exception of the tests).
+- Card Dealing: This was a big one. As it turns out, this entire time the reset_state function would occasionally only deal 3 cards to some players. This was due to me forgetting how many colors there were. I fixed that (and refactored the code slightly).
+
+### New Bots
+
+- MinimalistBot: This one is basically just the old ScorerBot strategy under a different name. The name is from the bot's strategy, where it will never score only to add cards to its hand. Naming things is hard, okay?
+- JealousBot: I noticed that none of the strategies reference player scores, so I created a bot that chooses the player with the highest score.
+
+### Tests
+
+- Game Logic Tests: In order to verify that the card dealing was fixed, I added a test for it. I also added some more tests for the other functions.
+- Bot Tests: To verify that the bots perform as their strategies dictate, I added some tests. I've only tested the first two bots (and the general-purpose MatchPlayer function) so far, and I'll do the rest later. Probably.
