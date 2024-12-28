@@ -9,15 +9,9 @@ def MatchPlayer(game, self_index=0):
     max_cards = 0
     max_quantity = 0
     target_index = self_index  # Default to scoring
-    card_possibilities = game.possible_cards()
 
     for player_index in range(4):
-        card_count = 0
-        quantity = 0
-        for color in card_possibilities:
-            if game.state[player_index * 8 + color - 1]:
-                card_count += 1
-                quantity += game.state[player_index * 8 + color - 1]
+        card_count, quantity = game.get_matching_count(self_index, True)
 
         if card_count > max_cards or (card_count == max_cards and quantity > max_quantity):
             max_cards = card_count
@@ -65,12 +59,7 @@ class MinimalistBot:
         self.name = "MinimalistBot"
 
     def turn(self, game, self_index):
-        card_possibilities = game.possible_cards()
-        self_card_count = 0
-        for color in card_possibilities:
-            if game.state[self_index * 8 + color - 1]:
-                self_card_count += 1
-
+        self_card_count = game.get_matching_count(self_index)
         if self_card_count > 0:
             return self_index
         else:
@@ -88,13 +77,9 @@ class CollectorBot:
         self.name = "CollectorBot"
 
     def turn(self, game, self_index):
-        card_possibilities = game.possible_cards()
-        self_card_count = 0
-        for color in card_possibilities:
-            if game.state[self_index * 8 + color - 1]:
-                self_card_count += 1
+        self_card_count = game.get_matching_count(self_index)
 
-        if self_card_count == len(card_possibilities):
+        if self_card_count == 3:
             return self_index
         else:
             return MatchPlayer(game, self_index)
@@ -129,11 +114,7 @@ class JealousBot:
         max_score = 0
         target_index = MatchPlayer(game, self_index)
         for player_index in range(4):
-            card_possibilities = game.possible_cards()
-            card_count = 0
-            for color in card_possibilities:
-                if game.state[player_index * 8 + color - 1]:
-                    card_count += 1
+            card_count = game.get_matching_count(player_index)
             if card_count > 0:
                 player_score = game.state[player_index * 8 + 7]
                 if player_score > max_score:

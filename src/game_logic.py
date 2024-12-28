@@ -50,15 +50,16 @@ class MantisGame:
         """
         card_count = 0
         quantity = 0
-        card_possibilities = self.possible_cards()
-        for color in card_possibilities:
-            if game.state[player_index * 8 + color - 1]:
+        for color in self.possible_cards():
+            if self.state[player_index * 8 + color - 1]:
                 card_count += 1
                 quantity += self.state[player_index * 8 + color - 1]
+
         if return_quantity:
-            return card_count
-        else:
             return card_count, quantity
+        else:
+            return card_count
+
 
     def load_gamestate(self, state_index, path="gamestates.json"):
         import json
