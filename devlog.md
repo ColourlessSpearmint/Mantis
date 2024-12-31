@@ -80,3 +80,7 @@ It's been a while. I was busy with Christmas-related things for most of the last
 
 - Game Logic Tests: In order to verify that the card dealing was fixed, I added a test for it. I also added some more tests for the other functions.
 - Bot Tests: To verify that the bots perform as their strategies dictate, I added some tests. I've only tested the first two bots (and the general-purpose MatchPlayer function) so far, and I'll do the rest later. Probably.
+
+## December 30, 2024: Beginning the Neural Network
+
+I've been putting off actually starting work on the neural network, but I had to start working on it at some point. It wasn't actually as much work as I suspected, due in large part because most of the PyTorch code (model.py, replay_buffer.py, train.py) was written by ChatGPT. I wrote env.py to integerate ChatGPT's code with the game logic. The NN doesn't seem to be learning very well, so I'll have to fix that tomorrow. 
