@@ -68,12 +68,13 @@ def train():
         game.reset()  # Reset the game environment at the start of each episode
         state = game.get_inputs()  # Get the initial game state
         done = False
+        temp_buffer = []
         while not done:
             action = epsilon_greedy_policy(state, epsilon)
             next_state, done = game.take_action(action)  # Take action and get next state
             
             # Add experience to the replay buffer
-            replay_buffer.add((state, action, 0, next_state))  # Reward is assigned later when done
+            temp_buffer.append((state, action, 0, next_state))
 
             state = next_state
 
@@ -85,7 +86,7 @@ def train():
             reward = -0.1  # No reward for losing (or -1 if you prefer)
 
         # Now update the experiences in the replay buffer with the final reward
-        for experience in replay_buffer.buffer:
+        for experience in temp_buffer:
             state, action, _, next_state = experience
             replay_buffer.add((state, action, reward, next_state))  # Add final reward to experience
 
