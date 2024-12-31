@@ -62,40 +62,47 @@ def train_step(batch):
 
 def train():
     epsilon = EPSILON_START
-    game = env.mantis()  # Assuming your environment is initialized like this
+    game = env.mantis()
     total_wins = 0
     for episode in range(EPISODES):
-        game.reset()
-        state = game.get_inputs()  # Get initial state
+        game.reset()  # Reset the game environment at the start of each episode
+        state = game.get_inputs()  # Get the initial game state
         done = False
         while not done:
             action = epsilon_greedy_policy(state, epsilon)
-            next_state, done = game.take_action(action)  # Take action, reward is handled externally
+            next_state, done = game.take_action(action)  # Take action and get next state
             
-            # Here we handle the reward logic based on whether the game is done
-            if done:
-                if game.has_won():  # You can check the winning condition directly
-                    reward = 1  # Positive reward for winning
-                    total_wins += 1  # Increment win counter
-                else:
-                    reward = -0.1  # Negative reward for losing
-            else:
-                reward = 0
-
-            assert len(state) == 35
-            assert len(next_state) == 35
-            replay_buffer.add((state, action, reward, next_state))
-            
-            # Training step
-            if replay_buffer.size() >= BATCH_SIZE:
-                batch = replay_buffer.sample(BATCH_SIZE)
-                train_step(batch)
+            # Add experience to the replay buffer
+            replay_buffer.add((state, action, 0, next_state))  # Reward is assigned later when done
 
             state = next_state
 
-        # Decay epsilon
+        # After the game ends, assign reward based on whether the agent won
+        if game.has_won():
+            reward = 1  # Positive reward for winning
+            total_wins += 1  # Increment win counter
+        else:
+            reward = -0.1  # No reward for losing (or -1 if you prefer)
+
+        # Now update the experiences in the replay buffer with the final reward
+        for experience in replay_buffer.buffer:
+            state, action, _, next_state = experience
+            replay_buffer.add((state, action, reward, next_state))  # Add final reward to experience
+
+        # Training step (after the episode is completed)
+        if replay_buffer.size() >= BATCH_SIZE:
+            batch = replay_buffer.sample(BATCH_SIZE)
+            train_step(batch)
+
+        # Decay epsilon (decreasing randomness over time)
         epsilon = max(EPSILON_END, epsilon * EPSILON_DECAY)
-        print(f"Episode {episode+1}/{EPISODES}, Epsilon {epsilon:.4f}, Wins {total_wins}/{episode+1}")
+        
+        # Displaying some analytics
+        win_rate = total_wins / (episode + 1)
+        print(f"Episode {episode+1}/{EPISODES}, Wins: {total_wins}, Epsilon {epsilon:.4f}, Win Rate: {win_rate:.4f}")
+
+    # Save the model after all episodes
+    #torch.save(model.state_dict(), 'mantis_model.pth')
     print(f"Training complete. Model saved with {total_wins} wins out of {EPISODES} episodes.")
 
 
