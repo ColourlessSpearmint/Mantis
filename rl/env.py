@@ -25,7 +25,7 @@ class mantis:
         else:
             is_done = True
 
-        return self.game.state, is_done
+        return (self.game.state)[:-1], is_done
     
     def get_inputs(self):
         return (self.game.state)[:-1]

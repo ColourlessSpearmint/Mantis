@@ -63,6 +63,7 @@ def train_step(batch):
 def train():
     epsilon = EPSILON_START
     game = env.mantis()  # Assuming your environment is initialized like this
+    total_wins = 0
     for episode in range(EPISODES):
         game.reset()
         state = game.get_inputs()  # Get initial state
@@ -75,9 +76,14 @@ def train():
             if done:
                 if game.has_won():  # You can check the winning condition directly
                     reward = 1  # Positive reward for winning
+                    total_wins += 1  # Increment win counter
                 else:
-                    reward = -1  # Negative reward for losing
+                    reward = -0.1  # Negative reward for losing
+            else:
+                reward = 0
 
+            assert len(state) == 35
+            assert len(next_state) == 35
             replay_buffer.add((state, action, reward, next_state))
             
             # Training step
@@ -89,7 +95,8 @@ def train():
 
         # Decay epsilon
         epsilon = max(EPSILON_END, epsilon * EPSILON_DECAY)
-        print(f"Episode {episode}, Epsilon {epsilon}")
+        print(f"Episode {episode+1}/{EPISODES}, Epsilon {epsilon:.4f}, Wins {total_wins}/{episode+1}")
+    print(f"Training complete. Model saved with {total_wins} wins out of {EPISODES} episodes.")
 
 
 if __name__ == '__main__':
