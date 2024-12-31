@@ -26,6 +26,9 @@ class MantisGame:
         self.debug = False
         self.playernames = ["Player Zero", "Player One", "Player Two", "Player Three"]
         self.players = ["manual", "manual", "manual", "manual"]
+        self.deck = []
+        self.deck_index = 0
+        self.deck_size = 512
 
     def set_player(self, player_index, player=None):
         if player == None:
@@ -81,7 +84,8 @@ class MantisGame:
         """
         Generates a new card and updates the game state.
         """
-        self.state[-4:] = self.generate_card()
+        self.state[-4:] = self.deck[self.deck_index]
+        self.deck_index += 1
     
     def possible_cards(self):
         """
@@ -103,8 +107,10 @@ class MantisGame:
                 self.state[player_index * 8 + rand_color - 1] += 1
             self.state[player_index * 8 + 7] = 0  # Reset score to 0
 
-        # Generate new card actual and possibilities
-        self.new_card()
+        # Generate new card deck
+        for i in range(self.deck_size):
+            self.deck.append(self.generate_card())
+            
 
     def convert_color(self, color_index, format="plain"):
         """

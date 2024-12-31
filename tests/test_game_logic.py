@@ -27,6 +27,7 @@ def test_generate_card():
 
 def test_new_card():
     game = MantisGame()
+    game.reset_state()
     game.new_card()
     assert len(game.state[-4:]) == 4
 
