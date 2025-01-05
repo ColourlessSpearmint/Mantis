@@ -15,7 +15,8 @@ EPSILON_START = 1.0
 EPSILON_END = 0.05
 EPSILON_DECAY = 0.995
 REPLAY_CAPACITY = 10000
-EPISODES = 1000
+EPISODES = 2000
+EPISODES_PER_STATE = 50  # New hyperparameter for episodes per game state
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -64,14 +65,24 @@ def train():
     epsilon = EPSILON_START
     game = env.mantis()
     total_wins = 0
+    cached_state = None
+    episodes_with_current_state = 0
+    
     for episode in range(EPISODES):
-        game.reset()  # Reset the game environment at the start of each episode
+        # Generate new starting state if needed
+        if episodes_with_current_state == 0:
+            game.reset()  # Reset to a new random state
+            cached_state = game.game.state.copy()  # Cache the new state
+        else:
+            game.game.state = cached_state.copy()  # Restore cached state
+            
         state = game.get_inputs()  # Get the initial game state
         done = False
         temp_buffer = []
+        
         while not done:
             action = epsilon_greedy_policy(state, epsilon)
-            next_state, done = game.take_action(action)  # Take action and get next state
+            next_state, done = game.take_action(action)
             
             # Add experience to the replay buffer
             temp_buffer.append((state, action, 0, next_state))
@@ -83,12 +94,12 @@ def train():
             reward = 1  # Positive reward for winning
             total_wins += 1  # Increment win counter
         else:
-            reward = -0.1  # No reward for losing (or -1 if you prefer)
+            reward = -1  # Negative reward for losing
 
         # Now update the experiences in the replay buffer with the final reward
         for experience in temp_buffer:
             state, action, _, next_state = experience
-            replay_buffer.add((state, action, reward, next_state))  # Add final reward to experience
+            replay_buffer.add((state, action, reward, next_state))
 
         # Training step (after the episode is completed)
         if replay_buffer.size() >= BATCH_SIZE:
@@ -98,14 +109,16 @@ def train():
         # Decay epsilon (decreasing randomness over time)
         epsilon = max(EPSILON_END, epsilon * EPSILON_DECAY)
         
+        # Update episodes counter for current state
+        episodes_with_current_state += 1
+        if episodes_with_current_state >= EPISODES_PER_STATE:
+            episodes_with_current_state = 0
+        
         # Displaying some analytics
         win_rate = total_wins / (episode + 1)
-        print(f"Episode {episode+1}/{EPISODES}, Wins: {total_wins}, Epsilon {epsilon:.4f}, Win Rate: {win_rate:.4f}")
+        print(f"Episode {episode+1}/{EPISODES}, Wins: {total_wins}, Epsilon {epsilon:.4f}, Win Rate: {win_rate:.4f}, State Episode: {episodes_with_current_state}")
 
-    # Save the model after all episodes
-    #torch.save(model.state_dict(), 'mantis_model.pth')
-    print(f"Training complete. Model saved with {total_wins} wins out of {EPISODES} episodes.")
-
+    print(f"Training complete. Model achieved {total_wins} wins out of {EPISODES} episodes.")
 
 if __name__ == '__main__':
     train()
