@@ -16,7 +16,8 @@ EPSILON_END = 0.05
 EPSILON_DECAY = 0.995
 REPLAY_CAPACITY = 10000
 EPISODES = 2000
-EPISODES_PER_STATE = 50  # New hyperparameter for episodes per game state
+WIN_RATE_THRESHOLD = 0.6  # New hyperparameter: required win rate to change state
+WIN_RATE_WINDOW = 30      # New hyperparameter: number of episodes to calculate win rate
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -66,13 +67,14 @@ def train():
     game = env.mantis()
     total_wins = 0
     cached_state = None
-    episodes_with_current_state = 0
+    recent_wins = []
     
     for episode in range(EPISODES):
         # Generate new starting state if needed
-        if episodes_with_current_state == 0:
+        if cached_state is None or (len(recent_wins) >= WIN_RATE_WINDOW and sum(recent_wins) / WIN_RATE_WINDOW >= WIN_RATE_THRESHOLD):
             game.reset()  # Reset to a new random state
             cached_state = game.game.state.copy()  # Cache the new state
+            recent_wins = []  # Reset recent wins tracker
         else:
             game.game.state = cached_state.copy()  # Restore cached state
             game.game.deck_index = 0
@@ -94,8 +96,14 @@ def train():
         if game.has_won():
             reward = 1  # Positive reward for winning
             total_wins += 1  # Increment win counter
+            recent_wins.append(1)  # Track win
         else:
             reward = -1  # Negative reward for losing
+            recent_wins.append(0)  # Track loss
+
+        # Maintain the size of recent_wins to be within WIN_RATE_WINDOW
+        if len(recent_wins) > WIN_RATE_WINDOW:
+            recent_wins.pop(0)
 
         # Now update the experiences in the replay buffer with the final reward
         for experience in temp_buffer:
@@ -110,14 +118,9 @@ def train():
         # Decay epsilon (decreasing randomness over time)
         epsilon = max(EPSILON_END, epsilon * EPSILON_DECAY)
         
-        # Update episodes counter for current state
-        episodes_with_current_state += 1
-        if episodes_with_current_state >= EPISODES_PER_STATE:
-            episodes_with_current_state = 0
-        
         # Displaying some analytics
         win_rate = total_wins / (episode + 1)
-        print(f"Episode {episode+1}/{EPISODES}, Wins: {total_wins}, Epsilon {epsilon:.4f}, Win Rate: {win_rate:.4f}, State Episode: {episodes_with_current_state}")
+        print(f"Episode {episode+1}/{EPISODES}, Wins: {total_wins}, Epsilon {epsilon:.4f}, Win Rate: {win_rate:.4f}, Recent Win Rate: {sum(recent_wins) / len(recent_wins):.4f}")
 
     print(f"Training complete. Model achieved {total_wins} wins out of {EPISODES} episodes.")
 
