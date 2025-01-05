@@ -75,6 +75,7 @@ def train():
             cached_state = game.game.state.copy()  # Cache the new state
         else:
             game.game.state = cached_state.copy()  # Restore cached state
+            game.game.deck_index = 0
             
         state = game.get_inputs()  # Get the initial game state
         done = False

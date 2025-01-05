@@ -107,6 +107,9 @@ class MantisGame:
                 self.state[player_index * 8 + rand_color - 1] += 1
             self.state[player_index * 8 + 7] = 0  # Reset score to 0
 
+        # Reset deck index
+        self.deck_index = 0
+
         # Generate new card deck
         for i in range(self.deck_size):
             self.deck.append(self.generate_card())
