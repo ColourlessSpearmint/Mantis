@@ -15,7 +15,7 @@ EPSILON_START = 1.0
 EPSILON_END = 0.05
 EPSILON_DECAY = 0.995
 REPLAY_CAPACITY = 10000
-EPISODES = 2000
+EPISODES = 20000
 WIN_RATE_THRESHOLD = 0.6  # New hyperparameter: required win rate to change state
 WIN_RATE_WINDOW = 30      # New hyperparameter: number of episodes to calculate win rate
 
@@ -66,17 +66,17 @@ def train():
     epsilon = EPSILON_START
     game = env.mantis()
     total_wins = 0
-    cached_state = None
+    cached_game = None
     recent_wins = []
     
     for episode in range(EPISODES):
         # Generate new starting state if needed
-        if cached_state is None or (len(recent_wins) >= WIN_RATE_WINDOW and sum(recent_wins) / WIN_RATE_WINDOW >= WIN_RATE_THRESHOLD):
+        if cached_game is None or (len(recent_wins) >= WIN_RATE_WINDOW and sum(recent_wins) / WIN_RATE_WINDOW >= WIN_RATE_THRESHOLD):
             game.reset()  # Reset to a new random state
-            cached_state = game.game.state.copy()  # Cache the new state
+            cached_game = game.game  # Cache the new state
             recent_wins = []  # Reset recent wins tracker
         else:
-            game.game.state = cached_state.copy()  # Restore cached state
+            game.game = cached_game  # Restore cached state
             game.game.deck_index = 0
             
         state = game.get_inputs()  # Get the initial game state
