@@ -84,3 +84,15 @@ It's been a while. I was busy with Christmas-related things for most of the last
 ## December 30, 2024: Beginning the Neural Network
 
 I've been putting off actually starting work on the neural network, but I had to start working on it at some point. It wasn't actually as much work as I suspected, due in large part because most of the PyTorch code (model.py, replay_buffer.py, train.py) was written by ChatGPT. I wrote env.py to integerate ChatGPT's code with the game logic. The NN doesn't seem to be learning very well, so I'll have to fix that tomorrow. 
+
+## December 31, 2024: Training Loop Experiments
+
+Most of what I did today was just experimenting with changing the training loop to see if I could improve the NN. I think that having instantaneous true random card generation was a bad idea from the perspective of making results reproducable, so I refactored card generation to include a deck that can be overriden. I can't tell if these improvements have helped or not.
+
+## January 5, 2025: More Training Loop Experiments
+
+Happy New Year! I didn't do any coding for the past four days. This wasn't because of any New Year-related festivities, but because I recently bought Factorio: Space Age. The factory must grow.
+
+Anyways, I think that a significant factor to the abysmal learning rate of the NN was that game is completely different in every episode, meaning that the NN doesn't have a chance to develop any strategy. Today I had the script cache the initial game state until it starts winning a lot, allowing the NN to replay it until it gets good at those specific starting conditions.
+
+The win rates are still erratic and vary wildly between executions, but the NN once got up to about 1500/2000 wins. Further experimentation is required.
