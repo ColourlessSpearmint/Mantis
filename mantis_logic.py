@@ -16,14 +16,20 @@ STARTINGTANKSIZE = 4
 
 class Mantis:
     def __init__(self):
-        self.players = [self.Player()]
-        self.deck = [self.Card()]
-        self.topCard = self.Card()
+        self.players = []
+        self.deck = []
         self.goal = 10
         self.turns = 0
 
         for i in range(DECKSIZE):
             self.deck.append(self.Card())
+
+        self.topCard = self.deck[-1]
+
+    def drawCard(self):
+        """Returns and pops (REMOVES) the top card from the deck."""
+        self.topCard = self.deck[-1]
+        return self.deck.pop()
 
     class Card:
         def __init__(self, colour="", possibleColours=[]):
@@ -51,21 +57,54 @@ class Mantis:
             self.colour = self.possibleColours[random.randint(1,NUMOFPOSSIBLECOLOURS)-1]
 
     class Player:
-        def __init__(self, name="Player"):
+        def __init__(self, mantis, name="Player"):
+            self.game = mantis
+            for player in self.game.players:
+                assert player.name != name
             self.name = name
             self.tank = []
             self.score = []
+            for i in range(STARTINGTANKSIZE):
+                self.tank.append(self.game.drawCard())
+            self.brain = self.Brain(self)
 
-    def addPlayer(self, playerName):
-        newPlayer = self.Player(playerName)
-        for i in range(STARTINGTANKSIZE):
-            newPlayer.tank.append(self.drawCard())
-        self.players.append(newPlayer)
-
-    def drawCard(self):
-        """Returns and pops (REMOVES) the top card from the deck."""
-        return self.deck.pop()
+        def action(self, target):
+            topCard = self.game.drawCard()
+            if self.name == target.name:
+                for card in self.tank:
+                    if card.colour == topCard.colour:
+                        self.tank.append(topCard)
+                        self.scoreColour(topCard.colour)
+                        return
+                self.tank.append(topCard)
+                return
+            else:
+                for card in target.tank:
+                    if card.colour == topCard.colour:
+                        target.tank.append(topCard)
+                        self.stealColour(target, topCard.colour)
+                        return
+                target.tank.append(topCard)
+                return
         
+        def stealColour(self, target, colour):
+            assert validateColour(colour)
+            for card in target.tank:
+                if card.colour == colour:
+                    self.tank.append(card)
+                    target.tank.remove(card)
+
+        def scoreColour(self, colour):
+            assert validateColour(colour)
+            for card in self.tank:
+                if card.colour == colour:
+                    self.score.append(card)
+                    self.tank.remove(card)
+
+        class Brain:
+            def __init__(self, player):
+                self.player = player
+
 
 def convertColourIndexToName(colourIndex: int) -> str:
     for colour in COLOURDICT.values():
@@ -84,3 +123,23 @@ def validateColour(colour=""):
 
 if __name__ == "__main__":
     game = Mantis()
+    game.players.append(game.Player(game, "Player1"))
+    game.players.append(game.Player(game, "Player2"))
+    game.players.append(game.Player(game, "Player3"))
+
+    print(game.topCard.possibleColours)
+    for card in game.players[0].tank:
+        print(card.possibleColours)
+    print()
+    for card in game.players[1].tank:
+        print(card.possibleColours)
+
+    game.players[0].action(game.players[1])
+
+    print()
+    print(game.topCard.possibleColours)
+    for card in game.players[0].tank:
+        print(card.possibleColours)
+    print()
+    for card in game.players[1].tank:
+        print(card.possibleColours)
