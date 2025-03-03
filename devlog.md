@@ -80,3 +80,36 @@ It's been a while. I was busy with Christmas-related things for most of the last
 
 - Game Logic Tests: In order to verify that the card dealing was fixed, I added a test for it. I also added some more tests for the other functions.
 - Bot Tests: To verify that the bots perform as their strategies dictate, I added some tests. I've only tested the first two bots (and the general-purpose MatchPlayer function) so far, and I'll do the rest later. Probably.
+
+## December 30, 2024: Beginning the Neural Network
+
+I've been putting off actually starting work on the neural network, but I had to start working on it at some point. It wasn't actually as much work as I suspected, due in large part because most of the PyTorch code (model.py, replay_buffer.py, train.py) was written by ChatGPT. I wrote env.py to integerate ChatGPT's code with the game logic. The NN doesn't seem to be learning very well, so I'll have to fix that tomorrow. 
+
+## December 31, 2024: Training Loop Experiments
+
+Most of what I did today was just experimenting with changing the training loop to see if I could improve the NN. I think that having instantaneous true random card generation was a bad idea from the perspective of making results reproducable, so I refactored card generation to include a deck that can be overriden. I can't tell if these improvements have helped or not.
+
+## January 5, 2025: More Training Loop Experiments
+
+Happy New Year! I didn't do any coding for the past four days. This wasn't because of any New Year-related festivities, but because I recently bought Factorio: Space Age. The factory must grow.
+
+Anyways, I think that a significant factor to the abysmal learning rate of the NN was that game is completely different in every episode, meaning that the NN doesn't have a chance to develop any strategy. Today I had the script cache the initial game state until it starts winning a lot, allowing the NN to replay it until it gets good at those specific starting conditions.
+
+The win rates are still erratic and vary wildly between executions, but the NN once got up to about 1500/2000 wins. Further experimentation is required.
+
+
+## March 2, 2025: Refactoring
+
+Remember back on December 27 when I apologized for taking a long six-day break over Christmas from working on this project? It's been nearly a month this time, but I'm back with a bunch of new ideas! 
+
+Idea #1: delete everything and rebuilt it from the ground up.
+
+Idea #2: I don't have any more ideas.
+
+### Refactoring
+
+I've decided to refactor the project from the ground up, as the framework I had built was terrible. I thought that my gamestate idea was genius, but it just restricted what I could do (e.g. not having 4 players). I'm using a bunch more classes this time around to hopefully make it more modular.
+
+When I coded the first few classes and functions, I was being very careful and intentional and professional. Then I started to get bored. I started coding faster and subsequently started making actual progress. It almost immediately devolved into a disorganized and haphazard shantycode. I'll fix it next time maybe.
+
+All of today's code was written manually, and it shows. Claude is better at nice code than I am.
