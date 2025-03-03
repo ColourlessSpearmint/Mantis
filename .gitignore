@@ -1,5 +1,6 @@
 # Ignore Visual Studio Code folders
 .vscode/
+archive/
 
 # Ignore Pycaches
 __pycache__/
