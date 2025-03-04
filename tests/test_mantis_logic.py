@@ -133,3 +133,21 @@ def test_get_info():
     assert info.next_card_possible_colours == ["blue", "orange", "yellow"]
     assert info.scores["Player 1"] == 0
     assert info.scores["Player 2"] == 1
+
+def test_get_info_shuffling():
+    game = mantis_logic.Mantis()
+    p1 = game.Player(game, None, "Player 1")
+    p2 = game.Player(game, None, "Player 2")
+    p3 = game.Player(game, None, "Player 3")
+    p4 = game.Player(game, None, "Player 4")
+
+    game.start_game()
+
+    times_in_order = 0
+    TIMES_TO_CHECK = 100
+    for _ in range(TIMES_TO_CHECK):
+        info = game.get_info(shuffle=True)
+        if info.player_names == ["Player 1", "Player 2", "Player 3", "Player 4"]:
+            times_in_order += 1
+    # We need to make sure that the list isn't unshuffled EVERY time.
+    assert times_in_order < TIMES_TO_CHECK
