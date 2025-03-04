@@ -103,7 +103,7 @@ class Mantis:
         for player in info.player_names:
             print(f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.scores[player]}")
         
-    def get_info(self, shuffle=False):
+    def get_info(self, shuffle=True):
         return self.Info(self, shuffle)
 
     class Info:
@@ -138,7 +138,7 @@ class Mantis:
                     Example: ["red", "orange", "yellow"]
         - active_player: the player whose turn it is next/currently.
         """
-        def __init__(self, game, shuffle=False):
+        def __init__(self, game, shuffle=True):
             input_player_names = game.players.copy()
             if shuffle:
                 random.shuffle(input_player_names)
