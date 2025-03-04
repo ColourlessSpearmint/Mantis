@@ -103,12 +103,13 @@ class Mantis:
         for player in info.player_names:
             print(f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.scores[player]}")
         
-    def get_info(self):
-        return self.Info(self)
+    def get_info(self, shuffle=False):
+        return self.Info(self, shuffle)
 
     class Info:
         """
-        For securely exposing the gamestate to brains.
+        A struct for securely exposing public gamestate information.
+        Has a parameter to shuffle the players to remove bias from poorly-coded Brains.
         
         - player_names: a list of the names of players.
                     Example: ["Player 1", "Player 2", "Player 3"]
@@ -137,18 +138,23 @@ class Mantis:
                     Example: ["red", "orange", "yellow"]
         - active_player: the player whose turn it is next/currently.
         """
-        def __init__(self, game):
+        def __init__(self, game, shuffle=False):
+            unshuffled_player_names = game.players.copy()
+            shuffled_player_names = random.shuffle(unshuffled_player_names)
+            input_player_names = shuffled_player_names if shuffle else unshuffled_player_names
+
             self.player_names = []
             self.tank_colours = {}
             self.scores = {}
 
-            for player in game.players:
+            for player in input_player_names:
                 self.player_names.append(player.name)
                 self.tank_colours[player.name] = player.get_tank_colours()
                 self.scores[player.name] = (len(player.score_pile))
 
             self.next_card_possible_colours = game.deck[-1].possible_colours
-            self.active_player = game.players[game.turns % len(game.players)]
+
+            self.active_player = game.players[game.turns % len(game.players)]  # It's important that this is NOT shuffled
 
     class Card:
         def __init__(self):
@@ -189,7 +195,7 @@ class Mantis:
             return matching_cards
 
         def take_turn(self):
-            target_name = self.brain.run(self.game.get_info())
+            target_name = self.brain.run(self.game.get_info(shuffle=True))
             for player in self.game.players:
                 if player.name == target_name:
                     target = player
