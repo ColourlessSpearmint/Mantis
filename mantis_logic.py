@@ -43,7 +43,7 @@ On your turn, choose ONE of these two actions:
 
 import random
 
-COLOURDICT = {
+COLOUR_DICT = {
     "red": {"index": 1, "name": "red", "emoji": "🟥"},
     "orange": {"index": 2, "name": "orange", "emoji": "🟧"},
     "yellow": {"index": 3, "name": "yellow", "emoji": "🟨"},
@@ -52,41 +52,41 @@ COLOURDICT = {
     "purple": {"index": 6, "name": "purple", "emoji": "🟪"},
     "pink": {"index": 7, "name": "pink", "emoji": "🌸"},
 }
-NUMOFCOLOURS = len(COLOURDICT)
-NUMOFPOSSIBLECOLOURS = 3
-DECKSIZE = 105
-STARTINGTANKSIZE = 4
-DEFAULTGOAL = 10
+NUM_OF_COLOURS = len(COLOUR_DICT)
+NUM_OF_POSSIBLE_COLOURS = 3
+DECK_SIZE = 105
+STARTING_TANK_SIZE = 4
+DEFAULT_GOAL = 10
 
 class Mantis:
     def __init__(self):
         self.players = []
         self.deck = []
-        self.goal = DEFAULTGOAL
+        self.goal = DEFAULT_GOAL
         self.turns = 0
 
-    def drawCard(self):
+    def draw_card(self):
         """Returns and pops (REMOVES) the top card from the deck."""
         return self.deck.pop()
 
-    def startGame(self):
-        self.shuffleDeck()
-        self.dealCards()
+    def start_game(self):
+        self.shuffle_deck()
+        self.deal_cards()
 
-    def dealCards(self):
+    def deal_cards(self):
         for player in self.players:
-            newTank = []
-            for i in range(STARTINGTANKSIZE):
-                newTank.append(self.drawCard())
-            player.tank = newTank
+            new_tank = []
+            for i in range(STARTING_TANK_SIZE):
+                new_tank.append(self.draw_card())
+            player.tank = new_tank
 
-    def shuffleDeck(self):
-        newDeck = []
-        for i in range(DECKSIZE):
-            newDeck.append(self.Card())
-        self.deck = newDeck
+    def shuffle_deck(self):
+        new_deck = []
+        for i in range(DECK_SIZE):
+            new_deck.append(self.Card())
+        self.deck = new_deck
 
-    def isValidName(self, name):
+    def is_valid_name(self, name):
         for player in self.players:
             if player.name == name:
                 return False
@@ -94,78 +94,78 @@ class Mantis:
 
     class Card:
         def __init__(self):
-            self.possibleColours = []
-            self.assignRandomPossibleColours()
-            self.assignRandomColour()
+            self.possible_colours = []
+            self.assign_random_possible_colours()
+            self.assign_random_colour()
 
-        def assignRandomPossibleColours(self):
-            self.possibleColours = convertColourListToNames(random.sample(range(1, NUMOFCOLOURS+1), NUMOFPOSSIBLECOLOURS))
+        def assign_random_possible_colours(self):
+            self.possible_colours = convert_colour_list_to_names(random.sample(range(1, NUM_OF_COLOURS+1), NUM_OF_POSSIBLE_COLOURS))
 
-        def assignRandomColour(self):
-            self.colour = self.possibleColours[random.randint(1,NUMOFPOSSIBLECOLOURS)-1]
+        def assign_random_colour(self):
+            self.colour = self.possible_colours[random.randint(1, NUM_OF_POSSIBLE_COLOURS)-1]
 
     class Player:
         def __init__(self, game, brain, name):
             self.game = game
-            if game.isValidName(name):
+            if game.is_valid_name(name):
                 self.name = name
             else:
                 raise ValueError(f"Duplicate names are not allowed: \'{name}\'")
             self.tank = []
-            self.scorePile = []
+            self.score_pile = []
             self.brain = brain
         
-        def getMatchingColours(self, colour):
-            assert validateColour(colour)
-            matchingCards = []
+        def get_matching_colours(self, colour):
+            assert validate_colour(colour)
+            matching_cards = []
             for card in self.tank:
                 if colour == card.colour:
-                    matchingCards.append(card)
-            return matchingCards
+                    matching_cards.append(card)
+            return matching_cards
 
-        def takeTurn(self):
+        def take_turn(self):
             target = self.brain.run()
             self.action(target)
 
         def action(self, target):
             if target.name == self.name:
-                self.stealAction()
+                self.steal_action()
             else:
-                self.scoreAction()
+                self.score_action()
 
-        def stealAction(self, target):
-            card = self.game.drawCard()
-            if target.getMatchingColours(card.colour):
+        def steal_action(self, target):
+            card = self.game.draw_card()
+            if target.get_matching_colours(card.colour):
                 target.tank.append(card)
-                target.moveColours(card.colour, self.tank)
+                target.move_colours(card.colour, self.tank)
             else:
                 target.tank.append(card)
 
-        def scoreAction(self):
-            card = self.game.drawCard()
-            if self.getMatchingColours(card.colour):
+        def score_action(self):
+            card = self.game.draw_card()
+            if self.get_matching_colours(card.colour):
                 self.tank.append(card)
-                self.moveColours(card.colour, self.scorePile)
+                self.move_colours(card.colour, self.score_pile)
             else:
                 self.tank.append(card)
         
-        def moveColours(self, colour, target:list):
-            for card in self.getMatchingColours(colour):
+        def move_colours(self, colour, target: list):
+            for card in self.get_matching_colours(colour):
                 self.tank.remove(card)
                 target.append(card)
 
-def convertColourIndexToName(colourIndex: int) -> str:
-    for colour in COLOURDICT.values():
-        if colour["index"] == colourIndex:
+def convert_colour_index_to_name(colour_index: int) -> str:
+    for colour in COLOUR_DICT.values():
+        if colour["index"] == colour_index:
             return colour["name"]
-    raise LookupError(f"Invalid colourIndex: \'{colourIndex}\'") 
+    raise LookupError(f"Invalid colour_index: \'{colour_index}\'") 
 
-def convertColourListToNames(colourIndexList: list) -> list:
-    colourNameList = []
-    for colourindex in colourIndexList:
-        colourNameList.append(convertColourIndexToName(colourindex))
-    return colourNameList
+def convert_colour_list_to_names(colour_index_list: list) -> list:
+    colour_name_list = []
+    for colour_index in colour_index_list:
+        colour_name_list.append(convert_colour_index_to_name(colour_index))
+    return colour_name_list
 
-def validateColour(colour=""):
-    return colour.lower() in COLOURDICT
+def validate_colour(colour=""):
+    return colour.lower() in COLOUR_DICT
 
