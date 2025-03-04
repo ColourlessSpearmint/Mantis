@@ -56,23 +56,44 @@ NUMOFCOLOURS = len(COLOURDICT)
 NUMOFPOSSIBLECOLOURS = 3
 DECKSIZE = 105
 STARTINGTANKSIZE = 4
+DEFAULTGOAL = 10
 
 class Mantis:
     def __init__(self):
         self.players = []
         self.deck = []
-        self.goal = 10
+        self.goal = DEFAULTGOAL
         self.turns = 0
-
-        for i in range(DECKSIZE):
-            self.deck.append(self.Card())
-
-        self.topCard = self.deck[-1]
 
     def drawCard(self):
         """Returns and pops (REMOVES) the top card from the deck."""
         self.topCard = self.deck[-1]
         return self.deck.pop()
+
+    def startGame(self):
+        self.shuffleDeck()
+        self.dealCards()
+
+    def dealCards(self):
+        for player in self.players:
+            newTank = []
+            for i in range(STARTINGTANKSIZE):
+                newTank.append(self.drawCard())
+            player.tank = newTank
+
+    def shuffleDeck(self):
+        newDeck = []
+        for i in range(DECKSIZE):
+            newDeck.append(self.Card())
+        self.deck = newDeck
+        self.topCard = self.deck[-1]
+
+    def isValidName(self, name):
+        for player in self.players:
+            if player.name == name:
+                return False
+        return True
+
 
     class Card:
         def __init__(self, colour="", possibleColours=[]):
@@ -102,13 +123,12 @@ class Mantis:
     class Player:
         def __init__(self, mantis, name="Player"):
             self.game = mantis
-            for player in self.game.players:
-                assert player.name != name
-            self.name = name
+            if mantis.isValidName(name):
+                self.name = name
+            else:
+                raise ValueError(f"Duplicate names are not allowed: \'{name}\'")
             self.tank = []
             self.score = []
-            for i in range(STARTINGTANKSIZE):
-                self.tank.append(self.game.drawCard())
             self.brain = self.Brain(self)
 
         def action(self, target):
