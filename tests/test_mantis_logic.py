@@ -108,3 +108,30 @@ def test_steal_action():
     assert p2.get_tank_colours() == ["green"]
     assert p1.score_pile == []
     assert p2.score_pile == []
+
+def test_get_info():
+    game = mantis_logic.Mantis()
+    p1 = game.Player(game, None, "Player 1")
+    p2 = game.Player(game, None, "Player 2")
+
+    red_card = game.Card()
+    red_card.colour = "red"
+    green_card = game.Card()
+    green_card.colour = "green"
+    blue_card = game.Card()
+    blue_card.colour = "blue"
+    blue_card.possible_colours = ["blue", "orange", "yellow"]
+
+    game.deck = [blue_card]
+    p1.tank = [green_card, green_card]
+    p2.tank = [red_card, red_card]
+    p2.score_pile = [green_card]
+
+    info = game.get_info()
+
+    assert info.player_names == ["Player 1", "Player 2"]
+    assert info.tank_colours["Player 1"] == ["green", "green"]
+    assert info.tank_colours["Player 2"] == ["red", "red"]
+    assert info.next_card_possible_colours == ["blue", "orange", "yellow"]
+    assert info.scores["Player 1"] == 0
+    assert info.scores["Player 2"] == 1
