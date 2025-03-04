@@ -91,6 +91,11 @@ class Mantis:
             if player.name == name:
                 return False
         return True
+    
+    def simulate_turn(self):
+        current_player = self.players[self.turns % len(self.players)]
+        current_player.take_turn()
+        self.turns += 1
 
     class Card:
         def __init__(self):
