@@ -56,15 +56,14 @@ def test_score_action():
     # Unsucessfully score, adding the unmatched green card to tank
     p1.score_action()
     assert p1.score_pile == []
-    assert p1.tank[0].colour == "red"
-    assert p1.tank[1].colour == "green"
+    assert p1.get_tank_colours() == ["red", "green"]
 
     # Sucessfully score, transferring both red cards to score pile
     p1.score_action()
     assert len(p1.score_pile) == 2
     assert p1.score_pile[0].colour == "red"
     assert p1.score_pile[1].colour == "red"
-    assert p1.tank[0].colour == "green"
+    assert p1.get_tank_colours() == ["green"]
 
 def test_steal_action():
     game = mantis_logic.Mantis()
@@ -89,17 +88,14 @@ def test_steal_action():
 
     # Unsucesfully steal, giving the drawn green card to p2's tank
     p1.steal_action(p2)
-    assert p1.tank[0].colour == "green"
-    assert p2.tank[0].colour == "red"
-    assert p2.tank[1].colour == "green"
+    assert p1.get_tank_colours() == ["green"]
+    assert p2.get_tank_colours() == ["red", "green"]
     assert p1.score_pile == []
     assert p2.score_pile == []
 
     # Sucessfully steal, moving p2's red cards to p1's tank
     p1.steal_action(p2)
-    assert p1.tank[0].colour == "green"
-    assert p1.tank[1].colour == "red"
-    assert p1.tank[2].colour == "red"
-    assert p2.tank[0].colour == "green"
+    assert p1.get_tank_colours() == ["green", "red", "red"]
+    assert p2.get_tank_colours() == ["green"]
     assert p1.score_pile == []
     assert p2.score_pile == []

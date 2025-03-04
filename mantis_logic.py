@@ -116,12 +116,11 @@ class Mantis:
             self.score_pile = []
             self.brain = brain
         
-        def print_tank(self):
-            
+        def get_tank_colours(self):
             tank_colours = []
             for card in self.tank:
                 tank_colours.append(card.colour)
-            print(f"{self.name}'s Tank: {tank_colours}")
+            return tank_colours
 
         def get_matching_colours(self, colour):
             assert validate_colour(colour)
