@@ -68,6 +68,15 @@ class Mantis:
     def draw_card(self):
         """Returns and pops (REMOVES) the top card from the deck."""
         return self.deck.pop()
+    
+    def generate_card(self, possible_colours, random_colour=True):
+        card = self.Card()
+        card.possible_colours = possible_colours
+        if random_colour:
+            card.assign_random_colour()
+        else:
+            card.colour = possible_colours[0]
+        return card
 
     def start_game(self):
         self.shuffle_deck()
@@ -166,7 +175,7 @@ class Mantis:
             self.possible_colours = convert_colour_list_to_names(random.sample(range(1, NUM_OF_COLOURS+1), NUM_OF_POSSIBLE_COLOURS))
 
         def assign_random_colour(self):
-            self.colour = self.possible_colours[random.randint(1, NUM_OF_POSSIBLE_COLOURS)-1]
+            self.colour = random.choice(self.possible_colours)
 
     class Player:
         def __init__(self, game, brain, name):
