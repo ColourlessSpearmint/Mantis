@@ -105,15 +105,15 @@ class Mantis:
             self.colour = self.possibleColours[random.randint(1,NUMOFPOSSIBLECOLOURS)-1]
 
     class Player:
-        def __init__(self, mantis, name="Player"):
-            self.game = mantis
-            if mantis.isValidName(name):
+        def __init__(self, game, brain, name):
+            self.game = game
+            if game.isValidName(name):
                 self.name = name
             else:
                 raise ValueError(f"Duplicate names are not allowed: \'{name}\'")
             self.tank = []
             self.scorePile = []
-            self.brain = self.DefaultBrain(self)
+            self.brain = brain
         
         def getMatchingColours(self, colour):
             assert validateColour(colour)
@@ -124,7 +124,8 @@ class Mantis:
             return matchingCards
 
         def takeTurn(self):
-            self.brain.takeTurn()
+            target = self.brain.run()
+            self.action(target)
 
         def action(self, target):
             if target.name == self.name:
@@ -152,17 +153,6 @@ class Mantis:
             for card in self.getMatchingColours(colour):
                 self.tank.remove(card)
                 target.append(card)
-
-        
-
-        class DefaultBrain:
-            """This is the default brain. It's strategy is to raise an exception"""
-            def __init__(self, player):
-                self.player = player
-
-            def takeTurn(self):
-                raise NotImplementedError("The default brain must not be used")
-
 
 def convertColourIndexToName(colourIndex: int) -> str:
     for colour in COLOURDICT.values():
