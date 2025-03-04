@@ -139,9 +139,9 @@ class Mantis:
         - active_player: the player whose turn it is next/currently.
         """
         def __init__(self, game, shuffle=False):
-            unshuffled_player_names = game.players.copy()
-            shuffled_player_names = random.shuffle(unshuffled_player_names)
-            input_player_names = shuffled_player_names if shuffle else unshuffled_player_names
+            input_player_names = game.players.copy()
+            if shuffle:
+                random.shuffle(input_player_names)
 
             self.player_names = []
             self.tank_colours = {}
