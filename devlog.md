@@ -121,12 +121,18 @@ That's right, a refactor of the refactor. I'm proud of myself for keeping my wor
 
 I undid a few of my dumb ideas and modularized the code. Maybe too much. I probably could group together a few of the functions.
 
-I noticed that I didn't explain my idea for the player brains in the previous devlog, so I'll do that now.
+### Player Brains Idea
 
-### Player Brains
+I noticed that I didn't explain my idea for the player brains in the previous devlog, so I'll do that now.
 
 I was thinking ahead to how I would implement bots when I came up with the idea of assigning each player object with a brain. The player object's takeTurn() method simply calls on its brain to do any logic to determine whether to score or steal (and from who). 
 
 The manual brain (which I'll probably set as the default) will use the Python input() function to get the user's desired target via command line. 
 
 I'm still yet to figure out how I want bot brains to retrieve information about the game (I can't just give them access to the Mantis object because they could access secret info like the card colour). I'll probably use a dict or custom class.
+
+## March 4, 2025: Brains
+
+Today I implemented the Player Brains I was talking about yesterday. I created an Info class to pass public information to each player's Brain. I verified my implementation of each strategy via tests (so many tests), and began work on the main turn loop.
+
+While I was at it, I also added a print_info() method that prints the Info class to the terminal. This is a good stopgap solution, but I'll need to make an actual UI at some point.
