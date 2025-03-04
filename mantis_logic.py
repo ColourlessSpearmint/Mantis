@@ -135,6 +135,7 @@ class Mantis:
 
         - next_card_possible_colours: a list of the possible colours of the next card in the deck.
                     Example: ["red", "orange", "yellow"]
+        - active_player: the player whose turn it is next/currently.
         """
         def __init__(self, game):
             self.player_names = []
@@ -147,6 +148,7 @@ class Mantis:
                 self.scores[player.name] = (len(player.score_pile))
 
             self.next_card_possible_colours = game.deck[-1].possible_colours
+            self.active_player = game.players[game.turns % len(game.players)]
 
     class Card:
         def __init__(self):
