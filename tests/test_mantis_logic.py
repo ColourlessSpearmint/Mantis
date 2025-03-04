@@ -31,7 +31,16 @@ def test_card_generation():
     for _ in range(100):
         card = game.Card()
         assert card.colour in card.possible_colours
-    
+
+def test_is_valid_name():
+    game = mantis_logic.Mantis()
+    game.Player(game, None, "Player 1")
+    assert game.is_valid_name("Player 1") is False
+    assert game.is_valid_name("Player 2") is True
+    game.Player(game, None, "Player 2")
+    assert game.is_valid_name("Player 1") is False
+    assert game.is_valid_name("Player 2") is False
+
 def test_score_action():
     game = mantis_logic.Mantis()
     assert len(game.deck) == 0
