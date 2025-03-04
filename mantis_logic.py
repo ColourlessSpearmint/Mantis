@@ -101,7 +101,7 @@ class Mantis:
         info = self.get_info()
         print(f"Next card: {convert_colour_list_to_emojis(info.next_card_possible_colours)}")
         for player in info.player_names:
-            print(f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.score_piles[player]}")
+            print(f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.scores[player]}")
         
     def get_info(self):
         return self.Info(self)
@@ -123,7 +123,7 @@ class Mantis:
                         "Player 3": ["pink", "blue", "green", "green"]
                     }
 
-        - score_piles: a dict where keys are player names and values are the number of cards in their score pile.
+        - scores: a dict where keys are player names and values are the number of cards in their score pile.
                     - Keys: player names (str).
                     - Values: an int representing the size of that player's score pile.
                     Example:
@@ -133,18 +133,18 @@ class Mantis:
                         "Player 3": 7
                     }
 
-        - next_card: a list of the possible colours of the next card in the deck.
+        - next_card_possible_colours: a list of the possible colours of the next card in the deck.
                     Example: ["red", "orange", "yellow"]
         """
         def __init__(self, game):
             self.player_names = []
             self.tank_colours = {}
-            self.score_piles = {}
+            self.scores = {}
 
             for player in game.players:
                 self.player_names.append(player.name)
                 self.tank_colours[player.name] = player.get_tank_colours()
-                self.score_piles[player.name] = (len(player.score_pile))
+                self.scores[player.name] = (len(player.score_pile))
 
             self.next_card_possible_colours = game.deck[-1].possible_colours
 
