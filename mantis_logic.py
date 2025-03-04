@@ -67,7 +67,6 @@ class Mantis:
 
     def drawCard(self):
         """Returns and pops (REMOVES) the top card from the deck."""
-        self.topCard = self.deck[-1]
         return self.deck.pop()
 
     def startGame(self):
@@ -86,7 +85,6 @@ class Mantis:
         for i in range(DECKSIZE):
             newDeck.append(self.Card())
         self.deck = newDeck
-        self.topCard = self.deck[-1]
 
     def isValidName(self, name):
         for player in self.players:
@@ -94,25 +92,11 @@ class Mantis:
                 return False
         return True
 
-
     class Card:
-        def __init__(self, colour="", possibleColours=[]):
+        def __init__(self):
             self.possibleColours = []
-            self.colour = ""
-            if possibleColours:
-                for possibleColour in possibleColours:
-                    assert validateColour(possibleColour)
-                self.possibleColours = possibleColours
-            else:
-                self.assignRandomPossibleColours()
-                if colour and colour not in self.possibleColours:
-                    self.possibleColours[0] = colour
-
-            if colour:
-                assert validateColour(colour)
-                self.colour = colour
-            else:
-                self.assignRandomColour()
+            self.assignRandomPossibleColours()
+            self.assignRandomColour()
 
         def assignRandomPossibleColours(self):
             self.possibleColours = convertColourListToNames(random.sample(range(1, NUMOFCOLOURS+1), NUMOFPOSSIBLECOLOURS))
@@ -128,45 +112,56 @@ class Mantis:
             else:
                 raise ValueError(f"Duplicate names are not allowed: \'{name}\'")
             self.tank = []
-            self.score = []
-            self.brain = self.Brain(self)
+            self.scorePile = []
+            self.brain = self.DefaultBrain(self)
+        
+        def getMatchingColours(self, colour):
+            assert validateColour(colour)
+            matchingCards = []
+            for card in self.tank:
+                if colour == card.colour:
+                    matchingCards.append(card)
+            return matchingCards
+
+        def takeTurn(self):
+            self.brain.takeTurn()
 
         def action(self, target):
-            topCard = self.game.drawCard()
-            if self.name == target.name:
-                for card in self.tank:
-                    if card.colour == topCard.colour:
-                        self.tank.append(topCard)
-                        self.scoreColour(topCard.colour)
-                        return
-                self.tank.append(topCard)
-                return
+            if target.name == self.name:
+                self.stealAction()
             else:
-                for card in target.tank:
-                    if card.colour == topCard.colour:
-                        target.tank.append(topCard)
-                        self.stealColour(target, topCard.colour)
-                        return
-                target.tank.append(topCard)
-                return
+                self.scoreAction()
+
+        def stealAction(self, target):
+            card = self.game.drawCard()
+            if target.getMatchingColours(card.colour):
+                target.tank.append(card)
+                target.moveColours(card.colour, self.tank)
+            else:
+                target.tank.append(card)
+
+        def scoreAction(self):
+            card = self.game.drawCard()
+            if self.getMatchingColours(card.colour):
+                self.tank.append(card)
+                self.moveColours(card.colour, self.scorePile)
+            else:
+                self.tank.append(card)
         
-        def stealColour(self, target, colour):
-            assert validateColour(colour)
-            for card in target.tank:
-                if card.colour == colour:
-                    self.tank.append(card)
-                    target.tank.remove(card)
+        def moveColours(self, colour, target:list):
+            for card in self.getMatchingColours(colour):
+                self.tank.remove(card)
+                target.append(card)
 
-        def scoreColour(self, colour):
-            assert validateColour(colour)
-            for card in self.tank:
-                if card.colour == colour:
-                    self.score.append(card)
-                    self.tank.remove(card)
+        
 
-        class Brain:
+        class DefaultBrain:
+            """This is the default brain. It's strategy is to raise an exception"""
             def __init__(self, player):
                 self.player = player
+
+            def takeTurn(self):
+                raise NotImplementedError("The default brain must not be used")
 
 
 def convertColourIndexToName(colourIndex: int) -> str:
@@ -184,25 +179,3 @@ def convertColourListToNames(colourIndexList: list) -> list:
 def validateColour(colour=""):
     return colour.lower() in COLOURDICT
 
-if __name__ == "__main__":
-    game = Mantis()
-    game.players.append(game.Player(game, "Player1"))
-    game.players.append(game.Player(game, "Player2"))
-    game.players.append(game.Player(game, "Player3"))
-
-    print(game.topCard.possibleColours)
-    for card in game.players[0].tank:
-        print(card.possibleColours)
-    print()
-    for card in game.players[1].tank:
-        print(card.possibleColours)
-
-    game.players[0].action(game.players[1])
-
-    print()
-    print(game.topCard.possibleColours)
-    for card in game.players[0].tank:
-        print(card.possibleColours)
-    print()
-    for card in game.players[1].tank:
-        print(card.possibleColours)
