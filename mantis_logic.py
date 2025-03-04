@@ -1,3 +1,46 @@
+"""
+Mantis Rules
+https://www.explodingkittens.com/pages/how-to-play-mantis
+
+## Game Overview
+- Players aim to be the first to collect 10+ cards in their Score Pile
+- 2-4 Players
+- Game uses 60 cards (6 colour, 10 of each colour)
+- Cards have two sides: white side (front) and peach side (back) with three different colours
+- The colour on the front is always one of the three colours shown on the back
+- The seven colours are: red, orange, yellow, green, blue, purple, pink
+
+## Setup
+- Shuffle the deck
+- Deal 4 cards face up (white side) to each player's Tank (hand)
+- Play proceeds clockwise
+
+## Turn Structure
+On your turn, choose ONE of these two actions:
+
+1. **Try to Score**:
+   - Take the top card from the Draw Pile
+   - Flip it over in YOUR Tank
+   - If the card colour matches any cards in your Tank:
+     - Move ALL cards of that colour (including the new one) to your Score Pile
+   - If no match:
+     - Leave the card in your Tank
+
+2. **Try to Steal**:
+   - Take the top card from the Draw Pile
+   - Flip it over in ANOTHER player's Tank
+   - If the card colour matches any cards in their Tank:
+     - Move ALL cards of that colour (including the new one) to YOUR Tank
+   - If no match:
+     - Leave the card in their Tank
+
+## Winning
+- First player with 10+ cards in their Score Pile wins
+- If Draw Pile runs out, player with most cards in Score Pile wins
+- If tied on Score Pile size, player with most cards in Tank wins
+"""
+
+
 import random
 
 COLOURDICT = {
