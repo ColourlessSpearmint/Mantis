@@ -113,3 +113,20 @@ I've decided to refactor the project from the ground up, as the framework I had 
 When I coded the first few classes and functions, I was being very careful and intentional and professional. Then I started to get bored. I started coding faster and subsequently started making actual progress. It almost immediately devolved into a disorganized and haphazard shantycode. I'll fix it next time maybe.
 
 All of today's code was written manually, and it shows. Claude is better at nice code than I am.
+
+## March 3, 2025: Despaghettification
+
+That's right, a refactor of the refactor. I'm proud of myself for keeping my word from last devlog: 
+> "I'll fix it next time maybe."
+
+I undid a few of my dumb ideas and modularized the code. Maybe too much. I probably could group together a few of the functions.
+
+I noticed that I didn't explain my idea for the player brains in the previous devlog, so I'll do that now.
+
+### Player Brains
+
+I was thinking ahead to how I would implement bots when I came up with the idea of assigning each player object with a brain. The player object's takeTurn() method simply calls on its brain to do any logic to determine whether to score or steal (and from who). 
+
+The manual brain (which I'll probably set as the default) will use the Python input() function to get the user's desired target via command line. 
+
+I'm still yet to figure out how I want bot brains to retrieve information about the game (I can't just give them access to the Mantis object because they could access secret info like the card colour). I'll probably use a dict or custom class.
