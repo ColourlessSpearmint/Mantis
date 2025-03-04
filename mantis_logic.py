@@ -189,7 +189,12 @@ class Mantis:
             return matching_cards
 
         def take_turn(self):
-            target = self.brain.run(self.game.get_info())
+            target_name = self.brain.run(self.game.get_info())
+            for player in self.game.players:
+                if player.name == target_name:
+                    target = player
+            if target is None:
+                raise ValueError(f"Invalid target name: \'{target_name}\'")
             self.action(target)
 
         def action(self, target):
