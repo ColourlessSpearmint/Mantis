@@ -96,6 +96,57 @@ class Mantis:
         current_player = self.players[self.turns % len(self.players)]
         current_player.take_turn()
         self.turns += 1
+    
+    def print_info(self):
+        info = self.get_info()
+        print(f"Next card: {convert_colour_list_to_emojis(info.next_card_possible_colours)}")
+        for player in info.player_names:
+            print(f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.score_piles[player]}")
+        
+    def get_info(self):
+        return self.Info(self)
+
+    class Info:
+        """
+        For securely exposing the gamestate to brains.
+        
+        - player_names: a list of the names of players.
+                    Example: ["Player 1", "Player 2", "Player 3"]
+
+        - tank_colours: a dictionary showing the colors of cards in each player's tank.
+                    - Keys: player names (str).
+                    - Values: a list of strings, where each string is a card color (e.g., "red", "blue") in that player's tank.
+                    Example:
+                    {
+                        "Player 1": ["red", "green"],
+                        "Player 2": ["orange", "purple", "yellow"],
+                        "Player 3": ["pink", "blue", "green", "green"]
+                    }
+
+        - score_piles: a dict where keys are player names and values are the number of cards in their score pile.
+                    - Keys: player names (str).
+                    - Values: an int representing the size of that player's score pile.
+                    Example:
+                    {
+                        "Player 1": 0,
+                        "Player 2": 3,
+                        "Player 3": 7
+                    }
+
+        - next_card: a list of the possible colours of the next card in the deck.
+                    Example: ["red", "orange", "yellow"]
+        """
+        def __init__(self, game):
+            self.player_names = []
+            self.tank_colours = {}
+            self.score_piles = {}
+
+            for player in game.players:
+                self.player_names.append(player.name)
+                self.tank_colours[player.name] = player.get_tank_colours()
+                self.score_piles[player.name] = (len(player.score_pile))
+
+            self.next_card_possible_colours = game.deck[-1].possible_colours
 
     class Card:
         def __init__(self):
@@ -136,7 +187,7 @@ class Mantis:
             return matching_cards
 
         def take_turn(self):
-            target = self.brain.run()
+            target = self.brain.run(self.game.get_info())
             self.action(target)
 
         def action(self, target):
@@ -178,6 +229,22 @@ def convert_colour_list_to_names(colour_index_list: list) -> list:
         colour_name_list.append(convert_colour_index_to_name(colour_index))
     return colour_name_list
 
+def convert_colour_name_to_emoji(colour_name: str) -> str:
+    return COLOUR_DICT[colour_name]["emoji"]
+
+def convert_colour_list_to_emojis(colour_name_list: list) -> list:
+    colour_emoji_list = []
+    for colour_name in colour_name_list:
+        colour_emoji_list.append(convert_colour_name_to_emoji(colour_name))
+    return colour_emoji_list
+
 def validate_colour(colour=""):
     return colour.lower() in COLOUR_DICT
 
+# A demo of print_info()
+if __name__ == "__main__":
+    game = Mantis()
+    game.Player(game, None, "Player 1")
+    game.Player(game, None, "Player 2")
+    game.start_game()
+    game.print_info()
