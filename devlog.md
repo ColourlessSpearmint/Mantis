@@ -135,4 +135,4 @@ I'm still yet to figure out how I want bot brains to retrieve information about 
 
 Today I implemented the Player Brains I was talking about yesterday. I created an Info class to pass public information to each player's Brain. I verified my implementation of each strategy via tests (so many tests), and began work on the main turn loop.
 
-While I was at it, I also added a print_info() method that prints the Info class to the terminal. This is a good stopgap solution, but I'll need to make an actual UI at some point.
+While I was at it, I also added a print_info() method that prints the Info class to the terminal. This is a good stopgap solution, but I'll need to make an actual UI at some point. I think I'll work on that next time.
