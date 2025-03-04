@@ -62,3 +62,19 @@ class MatcherBrain:
         set1 = set(list1)
         set2 = set(list2)
         return len(set1.intersection(set2))
+    
+class QuantityBrain:
+    def run(self, info):
+        """Chooses the player with the most cards in their tank."""
+        highest_quantity = -1
+        highest_quantity_players = []
+        for player in info.player_names:
+            quantity = len(info.tank_colours[player])
+            if quantity > highest_quantity:
+                highest_quantity = quantity
+                highest_quantity_players = [player]
+            elif quantity == highest_quantity:
+                highest_quantity_players.append(player)
+        if len(highest_quantity_players) == 0:
+            return info.player_names[0]
+        return highest_quantity_players[0]

@@ -180,3 +180,48 @@ class TestMatcherBrain:
 
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 4"
+
+class TestQuantityBrain:
+    def setup_method(self):
+        self.game = mantis_logic.Mantis()
+        self.p1 = self.game.Player(self.game, None, "Player 1")
+        self.p2 = self.game.Player(self.game, None, "Player 2")
+        self.p3 = self.game.Player(self.game, None, "Player 3")
+        self.p4 = self.game.Player(self.game, None, "Player 4")
+        self.game.start_game()
+        self.brain = brains.QuantityBrain()
+
+    def test_quantity_all_empty(self):
+        self.p1.tank = []
+        self.p2.tank = []
+        self.p3.tank = []
+        self.p4.tank = []
+        info = self.game.get_info(shuffle=True)
+        assert self.brain.run(info) in ["Player 1", "Player 2", "Player 3", "Player 4"]
+
+    def test_quantity_one_winner(self):
+        self.p1.tank = [self.game.Card(), self.game.Card()]
+        self.p2.tank = []
+        self.p3.tank = []
+        self.p4.tank = []
+
+        info = self.game.get_info()
+        assert self.brain.run(info) == "Player 1"
+
+    def test_quantity_two_player_tie(self):
+        self.p1.tank = [self.game.Card(), self.game.Card()]
+        self.p2.tank = [self.game.Card(), self.game.Card()]
+        self.p3.tank = []
+        self.p4.tank = []
+
+        info = self.game.get_info()
+        assert self.brain.run(info) in ["Player 1", "Player 2"]
+    
+    def test_quantity_different_quantities(self):
+        self.p1.tank = [self.game.Card(), self.game.Card(), self.game.Card()]
+        self.p2.tank = [self.game.Card(), self.game.Card()]
+        self.p3.tank = [self.game.Card()]
+        self.p4.tank = []
+
+        info = self.game.get_info()
+        assert self.brain.run(info) == "Player 1"
