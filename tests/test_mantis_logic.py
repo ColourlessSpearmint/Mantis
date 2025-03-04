@@ -4,13 +4,9 @@ import mantis_logic
 class Sample_Cards:
     def __init__(self):
         game = mantis_logic.Mantis()
-        self.red_card = game.Card()
-        self.red_card.colour = "red"
-        self.green_card = game.Card()
-        self.green_card.colour = "green"
-        self.blue_card = game.Card()
-        self.blue_card.colour = "blue"
-        self.blue_card.possible_colours = ["blue", "orange", "yellow"]
+        self.red_card = game.generate_card(["red", "orange", "pink"], random_colour=False)
+        self.green_card = game.generate_card(["green", "red", "blue"], random_colour=False)
+        self.blue_card = game.generate_card(["blue", "orange", "yellow"], random_colour=False)
 
 def test_convert_colour_index_to_name():
     assert mantis_logic.convert_colour_index_to_name(1) == "red"
@@ -37,11 +33,37 @@ def test_validate_colour():
 
     assert mantis_logic.validate_colour("1") is False
 
-def test_card_generation():
+def test_random_card_generation():
     game = mantis_logic.Mantis()
     for _ in range(100):
         card = game.Card()
         assert card.colour in card.possible_colours
+
+def test_manual_card_generation():
+    game = mantis_logic.Mantis()
+
+    card1 = game.generate_card(["blue", "purple", "pink"], random_colour=False)
+    assert card1.possible_colours == ["blue", "purple", "pink"]
+    assert card1.colour == "blue"
+
+    card2 = game.generate_card(["green", "red", "yellow"], random_colour=False)
+    assert card2.possible_colours == ["green", "red", "yellow"]
+    assert card2.colour == "green"
+
+    card3 = game.generate_card(["orange", "yellow", "purple"], random_colour=True)
+    assert card3.possible_colours == ["orange", "yellow", "purple"]
+    assert card3.colour in card3.possible_colours
+
+    times_not_shuffled = 0
+    TIMES_TO_CHECK = 100
+    for _ in range(TIMES_TO_CHECK):
+        card4 = game.generate_card(["pink", "red", "green"], random_colour=True)
+        assert card4.possible_colours == ["pink", "red", "green"]
+        assert card4.colour in card4.possible_colours
+        if card4.colour == card4.possible_colours[0]:
+            times_not_shuffled += 1
+    # We need to make sure that the list isn't unshuffled EVERY time.
+    assert times_not_shuffled < TIMES_TO_CHECK
 
 def test_is_valid_name():
     game = mantis_logic.Mantis()
@@ -125,7 +147,7 @@ def test_get_info():
     p2.tank = [sample_cards.red_card, sample_cards.red_card]
     p2.score_pile = [sample_cards.green_card]
 
-    info = game.get_info()
+    info = game.get_info(shuffle=False)
 
     assert info.player_names == ["Player 1", "Player 2"]
     assert info.tank_colours["Player 1"] == ["green", "green"]
@@ -143,11 +165,11 @@ def test_get_info_shuffling():
 
     game.start_game()
 
-    times_in_order = 0
+    times_not_shuffled = 0
     TIMES_TO_CHECK = 100
     for _ in range(TIMES_TO_CHECK):
         info = game.get_info(shuffle=True)
         if info.player_names == ["Player 1", "Player 2", "Player 3", "Player 4"]:
-            times_in_order += 1
+            times_not_shuffled += 1
     # We need to make sure that the list isn't unshuffled EVERY time.
-    assert times_in_order < TIMES_TO_CHECK
+    assert times_not_shuffled < TIMES_TO_CHECK
