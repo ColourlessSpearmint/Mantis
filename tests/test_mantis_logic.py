@@ -36,8 +36,7 @@ def test_score_action():
     game = mantis_logic.Mantis()
     assert len(game.deck) == 0
 
-    game.players.append(game.Player(game, None, "Player 1"))
-    p1 = game.players[0]
+    p1 = game.Player(game, None, "Player 1")
 
     assert p1.tank == []
     assert p1.score_pile == []
@@ -71,10 +70,8 @@ def test_steal_action():
     game = mantis_logic.Mantis()
     assert len(game.deck) == 0
 
-    game.players.append(game.Player(game, None, "Player 1"))
-    game.players.append(game.Player(game, None, "Player 2"))
-    p1 = game.players[0]
-    p2 = game.players[1]
+    p1 = game.Player(game, None, "Player 1")
+    p2 = game.Player(game, None, "Player 2")
 
     assert p1.tank == []
     assert p1.score_pile == []

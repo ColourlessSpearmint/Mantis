@@ -111,6 +111,7 @@ class Mantis:
                 self.name = name
             else:
                 raise ValueError(f"Duplicate names are not allowed: \'{name}\'")
+            self.game.players.append(self)
             self.tank = []
             self.score_pile = []
             self.brain = brain
