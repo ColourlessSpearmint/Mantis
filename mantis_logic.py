@@ -204,7 +204,8 @@ class Mantis:
             return matching_cards
 
         def take_turn(self):
-            target_name = self.brain.run(self.game.get_info(shuffle=True))
+            info = self.game.get_info(shuffle=True)
+            target_name = self.brain.run(self.brain, info)
             for player in self.game.players:
                 if player.name == target_name:
                     target = player
