@@ -101,10 +101,12 @@ class Mantis:
                 return False
         return True
     
-    def simulate_turn(self):
+    def simulate_turn(self, verbose=False):
         current_player = self.players[self.turns % len(self.players)]
-        current_player.take_turn()
+        result = current_player.take_turn()
         self.turns += 1
+        if verbose:
+            return result
     
     def print_info(self):
         info = self.get_info()
@@ -209,15 +211,24 @@ class Mantis:
             for player in self.game.players:
                 if player.name == target_name:
                     target = player
+                    break
             if target is None:
                 raise ValueError(f"Invalid target name: \'{target_name}\'")
-            self.action(target)
+            result = self.action(target)
+            result["active_player"] = self.name
+            return result
 
+        
+        
         def action(self, target):
             if target.name == self.name:
-                self.steal_action()
-            else:
                 self.score_action()
+                result = {"action": "score", "target": target.name}
+            else:
+                self.steal_action(target)
+                result = {"action": "steal", "target": target.name}
+            return result
+            
 
         def steal_action(self, target):
             card = self.game.draw_card()

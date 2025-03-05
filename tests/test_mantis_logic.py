@@ -184,4 +184,30 @@ def test_take_turn():
 
     game.start_game()
 
-    game.simulate_turn()
+    result = game.simulate_turn(verbose=True)
+    assert result["active_player"] == "Random"
+    assert result["action"] == "score" or "steal"
+    assert result["target"] in ["Random", "Blue Shell", "Scorer", "Quantity"]
+
+    p1.score_pile = [game.Card(), game.Card(), game.Card(), game.Card(), game.Card(), game.Card()]
+    p2.score_pile = []
+    p3.score_pile = []
+    p4.score_pile = []
+    result = game.simulate_turn(verbose=True)
+    assert result["active_player"] == "Blue Shell"
+    assert result["action"] == "steal"
+    assert result["target"] == "Random"
+
+    result = game.simulate_turn(verbose=True)
+    assert result["active_player"] == "Scorer"
+    assert result["action"] == "score"
+    assert result["target"] is "Scorer"
+
+    p1.tank = []
+    p2.tank = [game.Card(), game.Card(), game.Card(), game.Card(), game.Card(), ]
+    p3.tank = []
+    p4.tank = []
+    result = game.simulate_turn(verbose=True)
+    assert result["active_player"] == "Quantity"
+    assert result["action"] == "steal"
+    assert result["target"] == "Blue Shell"
