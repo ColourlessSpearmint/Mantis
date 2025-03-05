@@ -44,13 +44,13 @@ On your turn, choose ONE of these two actions:
 import random
 
 COLOUR_DICT = {
-    "red": {"index": 1, "name": "red", "emoji": "🟥"},
-    "orange": {"index": 2, "name": "orange", "emoji": "🟧"},
-    "yellow": {"index": 3, "name": "yellow", "emoji": "🟨"},
-    "green": {"index": 4, "name": "green", "emoji": "🟩"},
-    "blue": {"index": 5, "name": "blue", "emoji": "🟦"},
-    "purple": {"index": 6, "name": "purple", "emoji": "🟪"},
-    "pink": {"index": 7, "name": "pink", "emoji": "🌸"},
+    "red": {"index": 1, "name": "red", "emoji": "❤️"},
+    "orange": {"index": 2, "name": "orange", "emoji": "🧡"},
+    "yellow": {"index": 3, "name": "yellow", "emoji": "💛"},
+    "green": {"index": 4, "name": "green", "emoji": "💚"},
+    "blue": {"index": 5, "name": "blue", "emoji": "💙"},
+    "purple": {"index": 6, "name": "purple", "emoji": "💜"},
+    "pink": {"index": 7, "name": "pink", "emoji": "🩷"},
 }
 NUM_OF_COLOURS = len(COLOUR_DICT)
 NUM_OF_POSSIBLE_COLOURS = 3
