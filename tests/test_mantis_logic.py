@@ -1,5 +1,6 @@
 import pytest
 import mantis_logic
+import brains
 
 class Sample_Cards:
     def __init__(self):
@@ -173,3 +174,14 @@ def test_get_info_shuffling():
             times_not_shuffled += 1
     # We need to make sure that the list isn't unshuffled EVERY time.
     assert times_not_shuffled < TIMES_TO_CHECK
+
+def test_take_turn():
+    game = mantis_logic.Mantis()
+    p1 = game.Player(game, brains.RandomBrain, "Random")
+    p2 = game.Player(game, brains.BlueShellBrain, "Blue Shell")
+    p3 = game.Player(game, brains.ScorerBrain, "Scorer")
+    p4 = game.Player(game, brains.QuantityBrain, "Quantity")
+
+    game.start_game()
+
+    game.simulate_turn()
