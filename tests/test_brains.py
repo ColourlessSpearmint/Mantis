@@ -1,6 +1,6 @@
-import pytest
 import mantis_logic
 import brains
+
 
 class TestRandomBrain:
     def setup_method(self):
@@ -15,7 +15,8 @@ class TestRandomBrain:
     def test_random(self):
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
-    
+
+
 class TestScorerBrain:
     def setup_method(self):
         self.game = mantis_logic.Mantis()
@@ -43,6 +44,7 @@ class TestScorerBrain:
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 1"
 
+
 class TestBlueShellBrain:
     def setup_method(self):
         self.game = mantis_logic.Mantis()
@@ -52,7 +54,7 @@ class TestBlueShellBrain:
         self.p4 = self.game.Player(self.game, None, "Player 4")
         self.game.start_game()
         self.brain = brains.BlueShellBrain()
-        
+
     def test_blue_shell_all_zero(self):
         self.p1.score_pile = []
         self.p2.score_pile = []
@@ -92,6 +94,7 @@ class TestBlueShellBrain:
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 1" or "Player 2"
 
+
 class TestMatcherBrain:
     def setup_method(self):
         self.game = mantis_logic.Mantis()
@@ -112,7 +115,7 @@ class TestMatcherBrain:
 
         info = self.game.get_info(shuffle=True)
         assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
-    
+
     def test_matcher_equal_matches(self):
         # Test when all players have exactly one card matching the next card's possible colours
         self.game.deck = [self.game.generate_card(["blue", "purple", "pink"])]
@@ -123,7 +126,7 @@ class TestMatcherBrain:
 
         info = self.game.get_info(shuffle=True)
         assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
-    
+
     def test_matcher_one_match(self):
         # Test when only one player has a card matching the next card's possible colours
         self.game.deck = [self.game.generate_card(["blue", "purple", "pink"])]
@@ -151,7 +154,8 @@ class TestMatcherBrain:
         self.game.deck = [self.game.generate_card(["blue", "purple", "pink"])]
         self.p1.tank = [self.game.generate_card(["red", "orange", "yellow"])]
         self.p2.tank = [self.game.generate_card(["blue", "purple", "pink"])]
-        self.p3.tank = [self.game.generate_card(["blue", "purple", "pink"]), self.game.generate_card(["blue", "purple", "pink"])]
+        self.p3.tank = [self.game.generate_card(["blue", "purple", "pink"]),
+                        self.game.generate_card(["blue", "purple", "pink"])]
         self.p4.tank = [self.game.generate_card(["red", "orange", "yellow"])]
 
         info = self.game.get_info()
@@ -160,14 +164,15 @@ class TestMatcherBrain:
     def test_matcher_number_against_quantity(self):
         # Test when two players have cards matching the next card's possible colours, but one player has two single-match cards, and the other player has one double-match card
         self.game.deck = [self.game.generate_card(["blue", "purple", "pink"])]
-        self.p1.tank = [self.game.generate_card(["blue", "orange", "red"]), self.game.generate_card(["blue", "orange", "red"])]  # Two single-match
+        self.p1.tank = [self.game.generate_card(["blue", "orange", "red"]),
+                        self.game.generate_card(["blue", "orange", "red"])]  # Two single-match
         self.p2.tank = [self.game.generate_card(["blue", "purple", "red"])]  # One double-match
         self.p3.tank = [self.game.generate_card(["red", "orange", "yellow"])]
         self.p4.tank = [self.game.generate_card(["red", "orange", "yellow"])]
 
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 2"
-    
+
     def test_matcher_bulk_quantity_against_number(self):
         # Test when two players have cards matching the next card's possible colours, but one player has many single-match cards, and the other player has one double-match card
         self.game.deck = [self.game.generate_card(["blue", "purple", "pink"])]
@@ -180,6 +185,7 @@ class TestMatcherBrain:
 
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 4"
+
 
 class TestQuantityBrain:
     def setup_method(self):
@@ -216,7 +222,7 @@ class TestQuantityBrain:
 
         info = self.game.get_info()
         assert self.brain.run(info) in ["Player 1", "Player 2"]
-    
+
     def test_quantity_different_quantities(self):
         self.p1.tank = [self.game.Card(), self.game.Card(), self.game.Card()]
         self.p2.tank = [self.game.Card(), self.game.Card()]

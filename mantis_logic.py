@@ -41,18 +41,10 @@ On your turn, choose ONE of these two actions:
 """
 
 import random
+from utils import *
 
-COLOUR_DICT = {
-    "red": {"index": 1, "name": "red", "emoji": "❤️"},
-    "orange": {"index": 2, "name": "orange", "emoji": "🧡"},
-    "yellow": {"index": 3, "name": "yellow", "emoji": "💛"},
-    "green": {"index": 4, "name": "green", "emoji": "💚"},
-    "blue": {"index": 5, "name": "blue", "emoji": "💙"},
-    "purple": {"index": 6, "name": "purple", "emoji": "💜"},
-    "pink": {"index": 7, "name": "pink", "emoji": "🩷"},
-}
 NUM_OF_COLOURS = len(COLOUR_DICT)
-NUM_OF_POSSIBLE_COLOURS = 3
+NUM_OF_POSSIBLE_COLOURS_PER_CARD = 3
 DECK_SIZE = 105
 STARTING_TANK_SIZE = 4
 DEFAULT_GOAL = 10
@@ -152,7 +144,7 @@ class Mantis:
         """
 
         def __init__(self, parent_game, shuffle=True):
-            #self.game = parent_game  # For security reasons, we don't expose the game object.
+            # self.game = parent_game  # For security reasons, we don't expose the game object.
             input_player_names = parent_game.players.copy()
             if shuffle:
                 random.shuffle(input_player_names)
@@ -163,7 +155,7 @@ class Mantis:
 
             for player in input_player_names:
                 self.player_names.append(player.name)
-                self.tank_colours[player.name] = player.get_tank_colours()
+                self.tank_colours[player.name] = player.get_self_tank_colours()
                 self.scores[player.name] = (len(player.score_pile))
 
             self.next_card_possible_colours = parent_game.deck[-1].possible_colours
@@ -180,11 +172,17 @@ class Mantis:
                 self.assign_random_colour()
 
         def assign_random_possible_colours(self):
+            """Assigns random possible colours to this card"""
             self.possible_colours = convert_colour_list_to_names(
-                random.sample(range(1, NUM_OF_COLOURS + 1), NUM_OF_POSSIBLE_COLOURS))
+                random.sample(range(1, NUM_OF_COLOURS + 1), NUM_OF_POSSIBLE_COLOURS_PER_CARD))
 
         def assign_random_colour(self):
-            self.colour = random.choice(self.possible_colours)
+            """Assigns a random colour to this card from its possible colours"""
+            if self.possible_colours:
+                self.colour = random.choice(self.possible_colours)
+            else:
+                self.assign_random_possible_colours()
+                self.assign_random_colour()
 
     class Player:
         def __init__(self, parent_game, brain, name):
@@ -198,19 +196,8 @@ class Mantis:
             self.score_pile = []
             self.brain = brain
 
-        def get_tank_colours(self):
-            tank_colours = []
-            for card in self.tank:
-                tank_colours.append(card.colour)
-            return tank_colours
-
-        def get_matching_colours(self, colour):
-            assert validate_colour(colour)
-            matching_cards = []
-            for card in self.tank:
-                if colour == card.colour:
-                    matching_cards.append(card)
-            return matching_cards
+        def get_self_tank_colours(self):
+            return get_tank_colours(self)
 
         def take_turn(self):
             info = self.game.get_info(shuffle=True)
@@ -237,53 +224,25 @@ class Mantis:
 
         def steal_action(self, target):
             card = self.game.draw_card()
-            if target.get_matching_colours(card.colour):
+            if get_matching_colours_of_player(target, card.colour):
                 target.tank.append(card)
-                target.move_colours(card.colour, self.tank)
+                move_colours_from_tank(target, card.colour, self.tank)
             else:
                 target.tank.append(card)
 
         def score_action(self):
             card = self.game.draw_card()
-            if self.get_matching_colours(card.colour):
+            if self.get_self_matching_colours(card.colour):
                 self.tank.append(card)
-                self.move_colours(card.colour, self.score_pile)
+                self.move_colours_from_self_tank(card.colour, self.score_pile)
             else:
                 self.tank.append(card)
 
-        def move_colours(self, colour, target: list):
-            for card in self.get_matching_colours(colour):
-                self.tank.remove(card)
-                target.append(card)
+        def move_colours_from_self_tank(self, colour: str, target: list):
+            move_colours_from_tank(self, colour, target)
 
-
-def convert_colour_index_to_name(colour_index: int) -> str:
-    for colour in COLOUR_DICT.values():
-        if colour["index"] == colour_index:
-            return colour["name"]
-    raise LookupError(f"Invalid colour_index: \'{colour_index}\'")
-
-
-def convert_colour_list_to_names(colour_index_list: list) -> list:
-    colour_name_list = []
-    for colour_index in colour_index_list:
-        colour_name_list.append(convert_colour_index_to_name(colour_index))
-    return colour_name_list
-
-
-def convert_colour_name_to_emoji(colour_name: str) -> str:
-    return COLOUR_DICT[colour_name]["emoji"]
-
-
-def convert_colour_list_to_emojis(colour_name_list: list) -> list:
-    colour_emoji_list = []
-    for colour_name in colour_name_list:
-        colour_emoji_list.append(convert_colour_name_to_emoji(colour_name))
-    return colour_emoji_list
-
-
-def validate_colour(colour=""):
-    return colour.lower() in COLOUR_DICT
+        def get_self_matching_colours(self, colour: str) -> list:
+            return get_matching_colours_of_player(self, colour)
 
 
 # A demo of print_info()
