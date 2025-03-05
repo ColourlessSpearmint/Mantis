@@ -24,25 +24,17 @@ class BlueShellBrain:
                 best_target = player_name
         return best_target
 
-
-class MatcherBrain:
-    def run(self, info):
-        """Chooses the player with the most cards in their tank that match the possible colours of the next card.
-        Prioritizes the number of different matching colors, then the quantity of matching colors."""
-        pass
-
-
 class QuantityBrain:
     def run(self, info):
         """Chooses the player with the most cards in their tank."""
-        highest_quantity = -1
+        highest_quantity_of_matches = -1
         highest_quantity_players = []
         for player in info.player_names:
-            quantity = len(info.tank_colours[player])
-            if quantity > highest_quantity:
-                highest_quantity = quantity
+            quantity_of_matches = len(info.tank_colours[player])
+            if quantity_of_matches > highest_quantity_of_matches:
+                highest_quantity_of_matches = quantity_of_matches
                 highest_quantity_players = [player]
-            elif quantity == highest_quantity:
+            elif quantity_of_matches == highest_quantity_of_matches:
                 highest_quantity_players.append(player)
         if len(highest_quantity_players) == 0:
             return info.player_names[0]
