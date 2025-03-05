@@ -1,5 +1,6 @@
 class RandomBrain:
     import random
+
     def run(self, info):
         """Chooses a random player to target."""
         num_of_players = len(info.player_names)
@@ -23,6 +24,7 @@ class BlueShellBrain:
                 highest_score = score
                 best_target = player_name
         return best_target
+
 
 class QuantityBrain:
     def run(self, info):

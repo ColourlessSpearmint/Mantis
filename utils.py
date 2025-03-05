@@ -13,7 +13,7 @@ def convert_colour_index_to_name(colour_index: int) -> str:
     for colour in COLOUR_DICT.values():
         if colour["index"] == colour_index:
             return colour["name"]
-    raise LookupError(f"Invalid colour_index: \'{colour_index}\'")
+    raise LookupError(f"Invalid colour_index: '{colour_index}'")
 
 
 def convert_colour_list_to_names(colour_index_list: list) -> list:

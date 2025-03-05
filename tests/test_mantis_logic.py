@@ -7,9 +7,15 @@ TIMESTOCHECK = 100
 class SampleCards:
     def __init__(self):
         game = mantis_logic.Mantis()
-        self.red_card = game.generate_card(["red", "orange", "pink"], random_colour=False)
-        self.green_card = game.generate_card(["green", "red", "blue"], random_colour=False)
-        self.blue_card = game.generate_card(["blue", "orange", "yellow"], random_colour=False)
+        self.red_card = game.generate_card(
+            ["red", "orange", "pink"], random_colour=False
+        )
+        self.green_card = game.generate_card(
+            ["green", "red", "blue"], random_colour=False
+        )
+        self.blue_card = game.generate_card(
+            ["blue", "orange", "yellow"], random_colour=False
+        )
 
 
 def test_convert_colour_index_to_name():
@@ -23,9 +29,21 @@ def test_convert_colour_index_to_name():
 
 
 def test_convert_colour_list_to_names():
-    assert mantis_logic.convert_colour_list_to_names([1, 2, 3]) == ["red", "orange", "yellow"]
-    assert mantis_logic.convert_colour_list_to_names([4, 5, 6]) == ["green", "blue", "purple"]
-    assert mantis_logic.convert_colour_list_to_names([3, 5, 7]) == ["yellow", "blue", "pink"]
+    assert mantis_logic.convert_colour_list_to_names([1, 2, 3]) == [
+        "red",
+        "orange",
+        "yellow",
+    ]
+    assert mantis_logic.convert_colour_list_to_names([4, 5, 6]) == [
+        "green",
+        "blue",
+        "purple",
+    ]
+    assert mantis_logic.convert_colour_list_to_names([3, 5, 7]) == [
+        "yellow",
+        "blue",
+        "pink",
+    ]
 
 
 def test_validate_colour():
@@ -200,7 +218,14 @@ def test_take_turn():
     assert result["action"] == "score" or "steal"
     assert result["target"] in ["Random", "Blue Shell", "Scorer", "Quantity"]
 
-    p1.score_pile = [game.Card(), game.Card(), game.Card(), game.Card(), game.Card(), game.Card()]
+    p1.score_pile = [
+        game.Card(),
+        game.Card(),
+        game.Card(),
+        game.Card(),
+        game.Card(),
+        game.Card(),
+    ]
     p2.score_pile = []
     p3.score_pile = []
     p4.score_pile = []
@@ -215,7 +240,13 @@ def test_take_turn():
     assert result["target"] is "Scorer"
 
     p1.tank = []
-    p2.tank = [game.Card(), game.Card(), game.Card(), game.Card(), game.Card(), ]
+    p2.tank = [
+        game.Card(),
+        game.Card(),
+        game.Card(),
+        game.Card(),
+        game.Card(),
+    ]
     p3.tank = []
     p4.tank = []
     result = game.simulate_turn(verbose=True)

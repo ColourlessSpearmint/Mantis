@@ -1,5 +1,5 @@
-import mantis_logic
 import brains
+import mantis_logic
 
 
 class TestRandomBrain:
@@ -14,7 +14,9 @@ class TestRandomBrain:
 
     def test_random(self):
         info = self.game.get_info()
-        assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        assert (
+            self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        )
 
 
 class TestScorerBrain:
@@ -65,7 +67,9 @@ class TestBlueShellBrain:
         assert self.brain.run(info) == "Player 4"
 
         info = self.game.get_info(shuffle=True)
-        assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        assert (
+            self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        )
 
     def test_blue_shell_all_same(self):
         self.p1.score_pile = [self.game.Card()]
@@ -74,7 +78,9 @@ class TestBlueShellBrain:
         self.p4.score_pile = [self.game.Card()]
 
         info = self.game.get_info(shuffle=True)
-        assert self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        assert (
+            self.brain.run(info) == "Player 1" or "Player 2" or "Player 3" or "Player 4"
+        )
 
     def test_blue_shell_one_winner(self):
         self.p1.score_pile = [self.game.Card()]
