@@ -1,8 +1,7 @@
-import pytest
 import mantis_logic
 import brains
 
-class Sample_Cards:
+class SampleCards:
     def __init__(self):
         game = mantis_logic.Mantis()
         self.red_card = game.generate_card(["red", "orange", "pink"], random_colour=False)
@@ -77,7 +76,7 @@ def test_is_valid_name():
 
 def test_score_action():
     game = mantis_logic.Mantis()
-    sample_cards = Sample_Cards()
+    sample_cards = SampleCards()
     assert len(game.deck) == 0
 
     p1 = game.Player(game, None, "Player 1")
@@ -107,7 +106,7 @@ def test_score_action():
 
 def test_steal_action():
     game = mantis_logic.Mantis()
-    sample_cards = Sample_Cards()
+    sample_cards = SampleCards()
     assert len(game.deck) == 0
 
     p1 = game.Player(game, None, "Player 1")
@@ -139,7 +138,7 @@ def test_steal_action():
 
 def test_get_info():
     game = mantis_logic.Mantis()
-    sample_cards = Sample_Cards()
+    sample_cards = SampleCards()
     p1 = game.Player(game, None, "Player 1")
     p2 = game.Player(game, None, "Player 2")
 
