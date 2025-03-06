@@ -94,12 +94,26 @@ def test_manual_card_generation():
 
 def test_is_valid_name():
     game = mantis_logic.Mantis()
+
+    assert game.is_valid_new_name("score") is False
+    assert game.is_valid_new_name("steal") is False
+    assert game.is_valid_new_name("brain") is False
+    assert game.is_valid_new_name("mantis") is False
+    assert game.is_valid_new_name("SCORE") is False
+    assert game.is_valid_new_name("STEAL") is False
+    assert game.is_valid_new_name("BRAIN") is False
+    assert game.is_valid_new_name("MANTIS") is False
+
+    assert game.is_valid_new_name("Player 1") is True
     game.Player(game, None, "Player 1")
     assert game.is_valid_new_name("Player 1") is False
+    assert game.is_valid_new_name("player 1") is False
+
     assert game.is_valid_new_name("Player 2") is True
     game.Player(game, None, "Player 2")
     assert game.is_valid_new_name("Player 1") is False
     assert game.is_valid_new_name("Player 2") is False
+
 
 
 def test_score_action():

@@ -10,6 +10,12 @@ COLOUR_DICT = {
     "pink": {"index": 7, "name": "pink", "emoji": "🩷"},
 }
 
+DISALLOWED_NAMES = [
+    "score",
+    "steal",
+    "brain",
+    "mantis"
+]
 
 def convert_colour_index_to_name(colour_index: int) -> str:
     for colour in COLOUR_DICT.values():

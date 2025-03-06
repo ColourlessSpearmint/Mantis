@@ -89,14 +89,19 @@ class Mantis:
             new_deck.append(self.Card())
         self.deck = new_deck
 
-    def is_valid_new_name(self, name:str) -> bool:
+    def is_valid_new_name(self, input_name:str) -> bool:
         """Checks if the given name is valid for a new player."""
-        return not self.is_existing_name(name)
+        name = input_name.strip().lower()
+        if self.is_existing_name(name):
+            return False
+        if name in DISALLOWED_NAMES:
+            return False
+        return True
 
     def is_existing_name(self, name:str) -> bool:
         """Checks if the given name is already in use."""
         for player in self.players:
-            if player.name == name:
+            if player.name.lower() == name.lower():
                 return True
         return False
 
@@ -273,7 +278,7 @@ class Mantis:
             if self.game.is_valid_new_name(name):
                 self.name = name
             else:
-                raise ValueError(f"Duplicate names are not allowed: '{name}'")
+                raise ValueError(f"Invalid Player Name: '{name}'")
             self.game.players.append(self)
             self.tank = []
             self.score_pile = []
@@ -354,7 +359,8 @@ def demo():
     import brains
     game = Mantis()
     game.Player(game, brains.RandomBrain, "Random")
-    game.Player(game, brains.QuantityBrain, "Quantity")
+    game.Player(game, brains.ManualBrain, "Ethan")
+    game.Player(game, brains.ManualBrain, "Wesley")
     game.start_game()
     game.print_info()
     while not game.game_over_message():
