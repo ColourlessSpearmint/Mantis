@@ -108,6 +108,26 @@ class Mantis:
         if verbose:
             return result
 
+    def get_highest_score_player(self):
+        """Returns the player with the highest score"""
+        winner = None
+        highest_score = -1
+        for player in self.players:
+            if len(player.score_pile) > highest_score:
+                highest_score = len(player.score_pile)
+                winner = player
+        return winner
+
+    def game_over_message(self) -> str:
+        for player in self.players:
+            if len(player.score_pile) >= self.goal:
+                winner = self.get_highest_score_player()
+                winner_score = len(winner.score_pile)
+                return f"{winner.name} won with a score of {winner_score}!"
+        if len(self.deck) == 0:
+            return "Ran out of cards"
+        return ""  # If the game isn't over, we return a Falsy string
+
     def get_last_history_text(self, turn):
         history = self.history
         try:
@@ -148,14 +168,20 @@ class Mantis:
             print(
                 f"{player} - Tank: {tank_emojis_spaced_string}, Score: {info.scores[player]}"
             )
-        next_card_possible_colours = info.next_card_possible_colours
-        next_card_possible_colours_emojis = convert_colour_list_to_emojis(next_card_possible_colours)
-        next_card_possible_colours_emojis_spaced_string = list_to_spaced_string(next_card_possible_colours_emojis)
 
-        print(
-            f"Next card possible colours: {next_card_possible_colours_emojis_spaced_string}"
-        )
+        next_card_possible_colours = info.next_card_possible_colours
+        if next_card_possible_colours:
+            next_card_possible_colours_emojis = convert_colour_list_to_emojis(next_card_possible_colours)
+            next_card_possible_colours_emojis_spaced_string = list_to_spaced_string(next_card_possible_colours_emojis)
+            print(
+                f"Next card possible colours: {next_card_possible_colours_emojis_spaced_string}"
+            )
+        else:
+            print(
+                "No cards left in the deck."
+            )
         print()
+
 
     def get_info(self, shuffle=True):
         return self.Info(self, shuffle)
@@ -208,7 +234,10 @@ class Mantis:
                 self.tank_colours[player.name] = player.get_self_tank_colours()
                 self.scores[player.name] = len(player.score_pile)
 
-            self.next_card_possible_colours = parent_game.deck[-1].possible_colours
+            if len(parent_game.deck) > 0:
+                self.next_card_possible_colours = parent_game.deck[-1].possible_colours
+            else:
+                self.next_card_possible_colours = []
 
             self.active_player = parent_game.players[
                 parent_game.turns % len(parent_game.players)
@@ -320,14 +349,19 @@ class Mantis:
             return get_matching_colours_of_player(self, colour)
 
 
-# A demo of a game between two default Brains, RandomBrain and QuantityBrain
-if __name__ == "__main__":
+def demo():
+    """A demo of a game between two default Brains, RandomBrain and QuantityBrain"""
     import brains
     game = Mantis()
     game.Player(game, brains.RandomBrain, "Random")
     game.Player(game, brains.QuantityBrain, "Quantity")
     game.start_game()
     game.print_info()
-    for _ in range(10):
+    while not game.game_over_message():
         game.simulate_turn()
         game.print_info()
+    print(game.game_over_message())
+
+
+if __name__ == "__main__":
+    demo()
