@@ -146,3 +146,34 @@ class TestQuantityBrain:
 
         info = self.game.get_info()
         assert self.brain.run(info) == "Player 1"
+
+class TestKelptoBrain:
+    def setup_method(self):
+        self.game = mantis_logic.Mantis()
+        self.p1 = self.game.Player(self.game, None, "Player 1")
+        self.p2 = self.game.Player(self.game, None, "Player 2")
+        self.p3 = self.game.Player(self.game, None, "Player 3")
+        self.p4 = self.game.Player(self.game, None, "Player 4")
+        self.game.start_game()
+        self.brain = brains.KelptoBrain()
+
+    def test_kelpto(self):
+        self.game.turns = 0
+        info = self.game.get_info()
+        assert self.brain.run(info) != "Player 1"
+
+        self.game.turns = 1
+        info = self.game.get_info()
+        assert self.brain.run(info) != "Player 2"
+
+        self.game.turns = 2
+        info = self.game.get_info()
+        assert self.brain.run(info) != "Player 3"
+
+        self.game.turns = 3
+        info = self.game.get_info()
+        assert self.brain.run(info) != "Player 4"
+
+        self.game.turns = 4
+        info = self.game.get_info()
+        assert self.brain.run(info) != "Player 1"
