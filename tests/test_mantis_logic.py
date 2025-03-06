@@ -254,3 +254,16 @@ def test_take_turn():
     assert result["active_player"] == "Quantity"
     assert result["action"] == "steal"
     assert result["target"] == "Blue Shell"
+
+def test_out_of_cards():
+    """Tests game-over by running out of cards by simulating an all-Klepto game"""
+    game = mantis_logic.Mantis()
+    game.Player(game, brains.KelptoBrain, "Player 1")
+    game.Player(game, brains.KelptoBrain, "Player 2")
+    game.Player(game, brains.KelptoBrain, "Player 3")
+    game.Player(game, brains.KelptoBrain, "Player 4")
+    game.start_game()
+    for i in range(89):
+        assert not game.game_over_message()
+        game.simulate_turn()
+    assert game.game_over_message() == "Ran out of cards"
