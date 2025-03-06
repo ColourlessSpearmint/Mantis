@@ -57,6 +57,7 @@ class Mantis:
         self.deck = []
         self.goal = DEFAULT_GOAL
         self.turns = 0
+        self.history = []
 
     def draw_card(self):
         """Returns and pops (REMOVES) the top card from the deck."""
@@ -97,19 +98,37 @@ class Mantis:
     def simulate_turn(self, verbose=False):
         current_player = self.players[self.turns % len(self.players)]
         result = current_player.take_turn()
+        self.history.append(result)
         self.turns += 1
         if verbose:
             return result
 
     def print_info(self):
+        if self.history:
+            active_player = self.history[-1]['active_player']
+            action = self.history[-1]['action']
+            target = self.history[-1]['target']
+            match action:
+                case "score":
+                    print(
+                        f"{active_player} attempted to score."
+                    )
+                case "steal":
+                    print(
+                        f"{active_player} attempted to steal from {target}."
+                    )
+        else:
+            print("No history to print.")
+
         info = self.get_info()
         print(
-            f"Next card: {convert_colour_list_to_emojis(info.next_card_possible_colours)}"
+            f"Next card possible colours: {convert_colour_list_to_emojis(info.next_card_possible_colours)}"
         )
         for player in info.player_names:
             print(
                 f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.scores[player]}"
             )
+        print()
 
     def get_info(self, shuffle=True):
         return self.Info(self, shuffle)
@@ -255,8 +274,11 @@ class Mantis:
 
 # A demo of print_info()
 if __name__ == "__main__":
+    import brains
     game = Mantis()
-    game.Player(game, None, "Player 1")
-    game.Player(game, None, "Player 2")
+    game.Player(game, brains.RandomBrain, "Player 1")
+    game.Player(game, brains.QuantityBrain, "Player 2")
     game.start_game()
-    game.print_info()
+    for _ in range(3):
+        game.print_info()
+        game.simulate_turn()
