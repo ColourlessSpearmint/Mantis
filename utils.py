@@ -1,3 +1,5 @@
+# I chose hearts for the emojis because hearts are the only emoji that have versions in all seven Mantis colours.
+# The alternative would be using colorama or ANSI escape sequences to colour a block ('█').
 COLOUR_DICT = {
     "red": {"index": 1, "name": "red", "emoji": "❤️"},
     "orange": {"index": 2, "name": "orange", "emoji": "🧡"},
