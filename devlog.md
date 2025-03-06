@@ -44,12 +44,12 @@ more code I looked through, the more I started to realize that using classes was
 all the code, but the idea for using classes was courtesy of Copilot. I'm not yet sure if classes are a good idea.
 
 Anyway, next I implemented turn actions. It was mostly uneventful. I added a take_turn function that parses the target
-player and determines if the desired action is scoring or stealing. I'm not sure if it was necessary to create seperate
+player and determines if the desired action is scoring or stealing. I'm not sure if it was necessary to create separate
 methods for stealing and scoring, but I did.
 
 Next was the playable notebook. It uses the print_state function to give each player information about the game state.
 Then it asks for their input and simulates a turn based on that. Right now, I only have manual control implemented. I
-plan to change that tommorrow.
+plan to change that tomorrow.
 
 ## December 19, 2024: Bots
 
@@ -59,9 +59,9 @@ The first step was to come up with the strategies.
 
 1. MatcherBot: This bot performs my strategy from earlier: if it has the most matching colors, score; otherwise, steal
    from the player with the most matching colors.
-2. ScorerBot: This bot will score if it has any chance of sucessfully scoring; otherwise, it will steal from the player
+2. ScorerBot: This bot will score if it has any chance of successfully scoring; otherwise, it will steal from the player
    with the most matching colors.
-3. ThiefBot: This bot will score if it has a 100% chance of sucessfully scoring; otherwise, it will steal from the
+3. ThiefBot: This bot will score if it has a 100% chance of successfully scoring; otherwise, it will steal from the
    player with the most matching colors.
 4. RandomBot: This bot will choose a random player. That's it. I decided to add it to filter out bad strategies; if a
    strategy is consistently beat by RandomBot, it is a bad strategy.
@@ -110,7 +110,7 @@ It's been a while. I was busy with Christmas-related things for most of the last
 work on this project. The most important things I did were the bugfixes, but I also added some new bots and figured out
 how to add tests.
 
-### Bigfixes
+### Bugfixes
 
 - Bot Duel Winner Names: Last devlog, I noticed that the bot_duel notebook isn't actually tracking the winning player,
   and it actually elucidated the advantage of the starting player. I fixed that by tracking the .name (sic) of the
@@ -120,7 +120,7 @@ how to add tests.
   meant that it almost never scored, and when it did it was usually for reasons other than what its strategy dictates. I
   fixed this, and its strategy subsequently rose in the rankings.
 - Directory Cleanup: I've decided that the project structure suggested by ChatGPT was bad. I've collapsed src/game and
-  moved eveything into src. Also, I removed most of the unused files (except the tests).
+  moved everything into src. Also, I removed most of the unused files (except the tests).
 - Card Dealing: This was a big one. As it turns out, this entire time the reset_state function would occasionally only
   deal 3 cards to some players. This was due to me forgetting how many colors there were. I fixed that (and refactored
   the code slightly).
@@ -143,14 +143,14 @@ how to add tests.
 
 I've been putting off actually starting work on the neural network, but I had to start working on it at some point. It
 wasn't actually as much work as I suspected, due in large part because most of the PyTorch code (model.py,
-replay_buffer.py, train.py) was written by ChatGPT. I wrote env.py to integerate ChatGPT's code with the game logic. The
+replay_buffer.py, train.py) was written by ChatGPT. I wrote env.py to integrate ChatGPT's code with the game logic. The
 NN doesn't seem to be learning very well, so I'll have to fix that tomorrow.
 
 ## December 31, 2024: Training Loop Experiments
 
 Most of what I did today was just experimenting with changing the training loop to see if I could improve the NN. I
 think that having instantaneous true random card generation was a bad idea from the perspective of making results
-reproducable, so I refactored card generation to include a deck that can be overriden. I can't tell if these
+reproducible, so I refactored card generation to include a deck that can be overridden. I can't tell if these
 improvements have helped or not.
 
 ## January 5, 2025: More Training Loop Experiments
@@ -183,7 +183,7 @@ classes this time around to hopefully make it more modular.
 
 When I coded the first few classes and functions, I was being very careful and intentional and professional. Then I
 started to get bored. I started coding faster and subsequently started making actual progress. It almost immediately
-devolved into a disorganized and haphazard shantycode. I'll fix it next time, maybe.
+devolved into a disorganized and haphazard shanty code. I'll fix it next time, maybe.
 
 All of today's code was written manually, and it shows. Claude is better at nice code than I am.
 
