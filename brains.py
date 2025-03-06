@@ -49,3 +49,16 @@ class KelptoBrain:
         for player_name in info.player_names:
             if player_name != info.active_player.name:
                 return player_name
+
+class ManualBrain:
+    def run(self, info):
+        """A brain that queries the player for input via input()"""
+        print(f"Your turn, {info.active_player.name}!")
+        while True:
+            target_player = input(
+                f"Who do you want to target? ({info.player_names}): "
+            )
+            if target_player in info.player_names:
+                return target_player
+            else:
+                print(f"Invalid target: '{target_player}'. Try again.")
