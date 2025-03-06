@@ -57,14 +57,25 @@ def get_matching_colours_in_list(input_list: list, colour: str) -> list:
 
 
 def get_matching_colours_of_player(player, colour: str) -> list:
+    """Returns a list of the cards in this player's tank that match the given colour."""
+    assert validate_colour(colour)
     return get_matching_colours_in_list(player.tank, colour)
 
 
-def move_colours_from_list(source_list: list, colour: str, target_list: list):
+def move_colours_from_list(source_list: list, colour: str, target_list: list) -> int:
+    """Moves all cards of the given colour from the source list to the target list.
+    Returns the number of cards moved."""
+    assert validate_colour(colour)
+    cards_moved = 0
     for card in get_matching_colours_in_list(source_list, colour):
         source_list.remove(card)
         target_list.append(card)
+        cards_moved += 1
+    return cards_moved
 
 
-def move_colours_from_tank(player, colour: str, target_list: list):
-    move_colours_from_list(player.tank, colour, target_list)
+def move_colours_from_tank(player, colour: str, target_list: list) -> int:
+    """Moves all cards of the given colour from the player's tank to the target list.
+    Returns the number of cards moved."""
+    assert validate_colour(colour)
+    return move_colours_from_list(player.tank, colour, target_list)
