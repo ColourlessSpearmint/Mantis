@@ -108,12 +108,12 @@ class Mantis:
         if verbose:
             return result
 
-    def get_last_history_text(self):
+    def get_last_history_text(self, turn):
         history = self.history
-        if not history:
+        try:
+            last_history = history[turn-1]
+        except IndexError:
             return "No history."
-        last_history = history[self.turns-1]
-
 
         active_player = last_history['active_player']
         action = last_history['action']
@@ -137,7 +137,8 @@ class Mantis:
                 return f"{active_player} {outcome_text} stole {cards_moved} {card_actual_colour_emoji} cards from {target}."
 
     def print_info(self):
-        print(f"Turn {self.turns}: {self.get_last_history_text()}")
+        turn_count = self.turns
+        print(f"Turn {turn_count}: {self.get_last_history_text(turn_count)}")
 
         info = self.get_info(shuffle=False)
         for player in info.player_names:
@@ -319,13 +320,14 @@ class Mantis:
             return get_matching_colours_of_player(self, colour)
 
 
-# A demo of print_info()
+# A demo of a game between two default Brains, RandomBrain and QuantityBrain
 if __name__ == "__main__":
     import brains
     game = Mantis()
     game.Player(game, brains.RandomBrain, "Random")
     game.Player(game, brains.QuantityBrain, "Quantity")
     game.start_game()
+    game.print_info()
     for _ in range(10):
-        game.print_info()
         game.simulate_turn()
+        game.print_info()
