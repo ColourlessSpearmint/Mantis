@@ -41,3 +41,11 @@ class QuantityBrain:
         if len(highest_quantity_players) == 0:
             return info.player_names[0]
         return highest_quantity_players[0]
+
+class KelptoBrain:
+    def run(self, info):
+        """Steals from the first player (effectively a random player) that isn't itself.
+        Cannot win (because it never scores)."""
+        for player_name in info.player_names:
+            if player_name != info.active_player.name:
+                return player_name
