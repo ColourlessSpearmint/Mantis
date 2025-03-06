@@ -55,9 +55,14 @@ class ManualBrain:
         """A brain that queries the player for input via input()"""
         print(f"Your turn, {info.active_player.name}!")
         while True:
-            target_player = input(
+            player_input = input(
                 f"Who do you want to target? ({info.player_names}): "
-            )
+            ).lower()
+            match player_input:
+                case "score":
+                    target_player = info.active_player.name
+                case _:
+                    target_player = player_input
             if target_player in info.player_names:
                 return target_player
             else:
