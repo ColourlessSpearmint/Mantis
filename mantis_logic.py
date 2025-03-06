@@ -287,14 +287,16 @@ class Mantis:
         def get_self_tank_colours(self):
             return get_tank_colours(self)
 
+        def get_player_object_from_name(self, name:str):
+            for player in self.game.players:
+                if player.name.lower() == name.lower():
+                    return player
+            return None
+
         def take_turn(self):
             info = self.game.get_info(shuffle=True)
-            target_name = self.brain.run(self.brain, info)
-            target = None
-            for player in self.game.players:
-                if player.name == target_name:
-                    target = player
-                    break
+            target_name = self.brain.run(self.brain, info).lower()
+            target = self.get_player_object_from_name(target_name)
             if target is None:
                 raise ValueError(f"Invalid target name: '{target_name}'")
             result = self.action(target)

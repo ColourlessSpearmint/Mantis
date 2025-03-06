@@ -42,7 +42,7 @@ class QuantityBrain:
             return info.player_names[0]
         return highest_quantity_players[0]
 
-class KelptoBrain:
+class KleptoBrain:
     def run(self, info):
         """Steals from the first player (effectively a random player) that isn't itself.
         Cannot win (because it never scores)."""
@@ -57,13 +57,16 @@ class ManualBrain:
         while True:
             player_input = input(
                 f"Who do you want to target? ({info.player_names}): "
-            ).lower()
-            match player_input:
+            )
+            match player_input.lower():
                 case "score":
                     target_player = info.active_player.name
                 case _:
                     target_player = player_input
-            if target_player in info.player_names:
+            lowered_player_names = []
+            for player_name in info.player_names:
+                lowered_player_names.append(player_name.lower())
+            if target_player.lower() in lowered_player_names:
                 return target_player
             else:
                 print(f"Invalid target: '{target_player}'. Try again.")

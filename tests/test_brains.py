@@ -155,7 +155,7 @@ class TestKelptoBrain:
         self.p3 = self.game.Player(self.game, None, "Player 3")
         self.p4 = self.game.Player(self.game, None, "Player 4")
         self.game.start_game()
-        self.brain = brains.KelptoBrain()
+        self.brain = brains.KleptoBrain()
 
     def test_kelpto(self):
         self.game.turns = 0
