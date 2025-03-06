@@ -89,11 +89,16 @@ class Mantis:
             new_deck.append(self.Card())
         self.deck = new_deck
 
-    def is_valid_name(self, name):
+    def is_valid_new_name(self, name:str) -> bool:
+        """Checks if the given name is valid for a new player."""
+        return not self.is_existing_name(name)
+
+    def is_existing_name(self, name:str) -> bool:
+        """Checks if the given name is already in use."""
         for player in self.players:
             if player.name == name:
-                return False
-        return True
+                return True
+        return False
 
     def simulate_turn(self, verbose=False):
         current_player = self.players[self.turns % len(self.players)]
@@ -103,31 +108,52 @@ class Mantis:
         if verbose:
             return result
 
-    def print_info(self):
-        if self.history:
-            active_player = self.history[-1]['active_player']
-            action = self.history[-1]['action']
-            target = self.history[-1]['target']
-            match action:
-                case "score":
-                    print(
-                        f"{active_player} attempted to score."
-                    )
-                case "steal":
-                    print(
-                        f"{active_player} attempted to steal from {target}."
-                    )
-        else:
-            print("No history to print.")
+    def get_last_history_text(self):
+        history = self.history
+        if not history:
+            return "No history."
+        last_history = history[self.turns-1]
 
-        info = self.get_info()
-        print(
-            f"Next card possible colours: {convert_colour_list_to_emojis(info.next_card_possible_colours)}"
-        )
+
+        active_player = last_history['active_player']
+        action = last_history['action']
+        target = last_history['target']
+        cards_moved = last_history['cards_moved']
+        outcome = last_history['outcome']
+        card_actual_colour = last_history['card_actual_colour']
+        card_actual_colour_emoji = convert_colour_name_to_emoji(card_actual_colour)
+
+        outcome_text = ""
+        match outcome:
+            case "success":
+                outcome_text = "successfully"
+            case "fail":
+                outcome_text = "unsuccessfully"
+
+        match action:
+            case "score":
+                return f"{active_player} {outcome_text} scored {cards_moved} {card_actual_colour_emoji} cards."
+            case "steal":
+                return f"{active_player} {outcome_text} stole {cards_moved} {card_actual_colour_emoji} cards from {target}."
+
+    def print_info(self):
+        print(f"Turn {self.turns}: {self.get_last_history_text()}")
+
+        info = self.get_info(shuffle=False)
         for player in info.player_names:
+            tank_colours = info.tank_colours[player]
+            tank_emojis = convert_colour_list_to_emojis(tank_colours)
+            tank_emojis_spaced_string = list_to_spaced_string(tank_emojis)
             print(
-                f"{player} - Tank: {convert_colour_list_to_emojis(info.tank_colours[player])}, Score: {info.scores[player]}"
+                f"{player} - Tank: {tank_emojis_spaced_string}, Score: {info.scores[player]}"
             )
+        next_card_possible_colours = info.next_card_possible_colours
+        next_card_possible_colours_emojis = convert_colour_list_to_emojis(next_card_possible_colours)
+        next_card_possible_colours_emojis_spaced_string = list_to_spaced_string(next_card_possible_colours_emojis)
+
+        print(
+            f"Next card possible colours: {next_card_possible_colours_emojis_spaced_string}"
+        )
         print()
 
     def get_info(self, shuffle=True):
@@ -214,7 +240,7 @@ class Mantis:
     class Player:
         def __init__(self, parent_game, brain, name):
             self.game = parent_game
-            if self.game.is_valid_name(name):
+            if self.game.is_valid_new_name(name):
                 self.name = name
             else:
                 raise ValueError(f"Duplicate names are not allowed: '{name}'")
@@ -238,35 +264,56 @@ class Mantis:
                 raise ValueError(f"Invalid target name: '{target_name}'")
             result = self.action(target)
             result["active_player"] = self.name
+            result["target"] = target.name
             return result
 
-        def action(self, target):
+        def action(self, target) -> dict:
             if target.name == self.name:
-                self.score_action()
-                result = {"action": "score", "target": target.name}
+                return self.score_action()
             else:
-                self.steal_action(target)
-                result = {"action": "steal", "target": target.name}
-            return result
+                return self.steal_action(target)
 
-        def steal_action(self, target):
+        def steal_action(self, target) -> dict:
             card = self.game.draw_card()
             if get_matching_colours_of_player(target, card.colour):
                 target.tank.append(card)
-                move_colours_from_tank(target, card.colour, self.tank)
+                cards_moved = move_colours_from_tank(target, card.colour, self.tank)
+                outcome = "success"
             else:
                 target.tank.append(card)
+                cards_moved = 1
+                outcome = "fail"
 
-        def score_action(self):
+            result = {
+                "card_actual_colour": card.colour,
+                "cards_moved": cards_moved,
+                "outcome": outcome,
+                "action": "steal"
+            }
+            return result
+
+        def score_action(self) -> dict:
             card = self.game.draw_card()
             if self.get_self_matching_colours(card.colour):
                 self.tank.append(card)
-                self.move_colours_from_self_tank(card.colour, self.score_pile)
+                cards_moved = self.move_colours_from_self_tank(card.colour, self.score_pile)
+                outcome = "success"
             else:
                 self.tank.append(card)
+                cards_moved = 1
+                outcome =  "fail"
 
-        def move_colours_from_self_tank(self, colour: str, target: list):
-            move_colours_from_tank(self, colour, target)
+            result = {
+                "card_actual_colour": card.colour,
+                "cards_moved": cards_moved,
+                "outcome": outcome,
+                "action": "score"
+            }
+            return result
+
+
+        def move_colours_from_self_tank(self, colour: str, target: list) -> int:
+            return move_colours_from_tank(self, colour, target)
 
         def get_self_matching_colours(self, colour: str) -> list:
             return get_matching_colours_of_player(self, colour)
@@ -276,9 +323,9 @@ class Mantis:
 if __name__ == "__main__":
     import brains
     game = Mantis()
-    game.Player(game, brains.RandomBrain, "Player 1")
-    game.Player(game, brains.QuantityBrain, "Player 2")
+    game.Player(game, brains.RandomBrain, "Random")
+    game.Player(game, brains.QuantityBrain, "Quantity")
     game.start_game()
-    for _ in range(3):
+    for _ in range(10):
         game.print_info()
         game.simulate_turn()

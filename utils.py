@@ -79,3 +79,10 @@ def move_colours_from_tank(player, colour: str, target_list: list) -> int:
     Returns the number of cards moved."""
     assert validate_colour(colour)
     return move_colours_from_list(player.tank, colour, target_list)
+
+def list_to_spaced_string(input_list:list) -> str:
+    """Converts a list of strings into one string where each item is separated by one space"""
+    output_string = ""
+    for item in input_list:
+        output_string += item + " "
+    return output_string.strip()
