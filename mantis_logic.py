@@ -105,13 +105,12 @@ class Mantis:
                 return True
         return False
 
-    def simulate_turn(self, verbose=False):
+    def simulate_turn(self):
         current_player = self.players[self.turns % len(self.players)]
         result = current_player.take_turn()
         self.history.append(result)
         self.turns += 1
-        if verbose:
-            return result
+        return result
 
     def get_highest_score_player(self):
         """Returns the player with the highest score"""
