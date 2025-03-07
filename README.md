@@ -36,6 +36,8 @@ I'm currently in the middle of refactoring the code. See the [devlog](https://gi
 
 This section describes how to run the code. For instructions on how to play Mantis, consult the [official rules](https://www.explodingkittens.com/pages/how-to-play-mantis).
 
+If you don't want to run the project locally, you can also use my [Colab demo](https://colab.research.google.com/drive/1ZNCDydqIY79T9lViSvtTxuxSISGiUHdg?usp=sharing).
+
 1.  **Clone the Repository**:
     ```bash
     git clone https://github.com/ColourlessSpearmint/Mantis.git
