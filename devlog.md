@@ -219,7 +219,7 @@ main turn loop.
 While I was at it, I also added a print_info() method that prints the Info class to the terminal. This is a good stopgap
 solution, but I'll need to make an actual UI at some point. I think I'll work on that next time.
 
-# March 5, 2025: Utils
+## March 5, 2025: Utils
 
 Today I added moved the static methods to a utils file and re-added them.
 
@@ -227,4 +227,22 @@ I tried to fix MatcherBrain, and recoded it a half-dozen times, before eventuall
 strategy to something simpler. When I failed to even implement that, I gave up.
 
 I also switched to PyCharm from VSCode. It immediately started chirping at me with various warnings, like "shadows name
-from outer scope". I fixed these, and then used the reformat option, which ran Black to add consistent spacing and indents.
+from outer scope". I fixed these, and then used the reformat option, which ran Black to add consistent spacing and
+indents.
+
+## March 6, 2025: Prototype
+
+Today I got the game to a playable state. This required adding the following things:
+
+- I added the history attribute that keeps track of the result of each turn. The main use case (although it'd be helpful
+  for tests) is in print_info(), where I can print information about what happened last turn to the terminal.
+- I implemented game-over logic that checks if a player has a score greater than goal or if the deck is empty.
+- I added ManualBrain, a Brain that takes manual input. This was really easy to implement, and I'm quite pleased
+  that I had the idea to use Brains rather than hardcoding bot behavior and interfaces.
+
+I recruited my brother to help me playtest the game, and it went pretty well. He kept misspelling his own name (his
+excuse was that he's not used to a full-size keyboard), so I added in the 'score' shortcut to ManualBrain. I wrote
+demo.py based on the temporary code for the playtest.
+
+I also updated the README. I decided to refer to the Brains as bots, as it seems more intuitive than my made-up
+technical terminology.
