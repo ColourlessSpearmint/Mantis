@@ -177,3 +177,34 @@ class TestKelptoBrain:
         self.game.turns = 4
         info = self.game.get_info()
         assert self.brain.run(info) != "Player 1"
+
+class TestManualBrain:
+    def setup_method(self):
+        self.game = mantis_logic.Mantis()
+        self.p1 = self.game.Player(self.game, brains.ManualBrain, "Player 1")
+        self.p2 = self.game.Player(self.game, brains.ManualBrain, "Player 2")
+        self.p3 = self.game.Player(self.game, brains.ManualBrain, "Player 3")
+        self.p4 = self.game.Player(self.game, brains.ManualBrain, "Player 4")
+        self.game.start_game()
+
+    def test_manual(self, monkeypatch):
+        monkeypatch.setattr("builtins.input", lambda _: "Player 2")
+        result = self.game.simulate_turn()
+        assert result["target"] == "Player 2"
+
+        monkeypatch.setattr("builtins.input", lambda _: "Player 1")
+        result = self.game.simulate_turn()
+        assert result["target"] == "Player 1"
+
+        monkeypatch.setattr("builtins.input", lambda _: "score")
+        result = self.game.simulate_turn()
+        assert result["target"] == "Player 3"
+
+        monkeypatch.setattr("builtins.input", lambda _: "player 1")
+        result = self.game.simulate_turn()
+        assert result["target"] == "Player 1"
+
+        """ This code will wait for user input forever, so we don't actually run it.
+        monkeypatch.setattr("builtins.input", lambda _: "not_a_player")
+        result = self.game.simulate_turn()
+        """
