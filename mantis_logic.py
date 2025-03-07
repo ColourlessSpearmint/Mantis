@@ -353,22 +353,3 @@ class Mantis:
 
         def get_self_matching_colours(self, colour: str) -> list:
             return get_matching_colours_of_player(self, colour)
-
-
-def demo():
-    """A demo of a game between two default Brains, RandomBrain and QuantityBrain"""
-    import brains
-    game = Mantis()
-    game.Player(game, brains.RandomBrain, "Random")
-    game.Player(game, brains.ManualBrain, "Ethan")
-    game.Player(game, brains.ManualBrain, "Wesley")
-    game.start_game()
-    game.print_info()
-    while not game.game_over_message():
-        game.simulate_turn()
-        game.print_info()
-    print(game.game_over_message())
-
-
-if __name__ == "__main__":
-    demo()
