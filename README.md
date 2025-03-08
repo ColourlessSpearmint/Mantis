@@ -1,16 +1,13 @@
 <h1 align="center">
-  <img src="images/readme_decorations/mantis_logo_transparent.png" alt="Mantis Logo" width="350">
+  <img src="images/readme_decorations/mantis_logo_transparent.png" alt="Mantis" width="350">
 </h1>
 
 This project is a digital emulator for the card game [Mantis](https://www.explodingkittens.com/products/mantis).
 
-## 🚧 WIP
-I'm currently in the middle of refactoring the code. See the [devlog](https://github.com/ColourlessSpearmint/Mantis/blob/feature/refactor/devlog.md) for more info.
-
 ## 🚀 Features
 
 <div align="center">
-  <img src="images/readme_decorations/card_types_transparent.png" alt="Card Types" width="600">
+  <img src="images/readme_decorations/card_types_transparent.png" alt="Card Colours" width="600">
 </div>
 
 - **Game Logic**: Complete game emulation, including game setup, scoring, and stealing.
@@ -18,20 +15,20 @@ I'm currently in the middle of refactoring the code. See the [devlog](https://gi
 - **Solo Play**: A variety of built-in strategies for single player or bot matches.
 - **Multiplayer**: Highly modular Manual Controllers that allow for many different players.
 
-# Upcoming Features
+## 🚧 Upcoming Features
 
 <h1 align="center">
   <img src="images/readme_decorations/card_backs_transparent.png" alt="Card Backs" width="600">
 </h1>
 
-**Bot Analytics**: A notebook that analyzes the performance of different bot strategies.
+- **Bot Analytics**: A notebook that analyzes the performance of different bot strategies.
 - **PyGame Interface**: A graphical user interface to make the game more visually appealing.
 - **Neural Network**: A player powered by ML (Machine Learning) that learns to play Mantis.
 
 ## 🕹️ Usage
 
 <div align="center">
-  <img src="images/readme_decorations/card_vertical_rows_transparent_banner.png" alt="Card Types" width="600">
+  <img src="images/readme_decorations/card_vertical_rows_transparent_banner.png" alt="Card Rows" width="600">
 </div>
 
 This section describes how to run the code. For instructions on how to play Mantis, consult the [official rules](https://www.explodingkittens.com/pages/how-to-play-mantis).
@@ -66,5 +63,5 @@ This project is licensed under the [Apache 2.0 License](https://www.apache.org/l
 Images used in this project are sourced from the official [Mantis website](https://www.explodingkittens.com/products/mantis) and are used for decorative purposes only.
 
 <div align="center">
-  <img src="images/readme_decorations/mantis_shrimp_transparent.png" alt="Card Types" width="300">
+  <img src="images/readme_decorations/mantis_shrimp_transparent.png" alt="Mantis Shrimp" width="300">
 </div>
