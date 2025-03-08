@@ -115,6 +115,27 @@ def test_is_valid_name():
     assert game.is_valid_new_name("Player 2") is False
 
 
+def test_is_valid_num_of_players():
+    game = mantis_logic.Mantis()
+    assert game.is_valid_num_of_players() is False  # 0 Players
+
+    game.Player(game, None, "Player 1")
+    assert game.is_valid_num_of_players() is False  # 1 Player
+
+    game.Player(game, None, "Player 2")
+    assert game.is_valid_num_of_players() is True # 2 Players
+
+    game.Player(game, None, "Player 3")
+    assert game.is_valid_num_of_players() is True # 3 Players
+
+    game.Player(game, None, "Player 4")
+    game.Player(game, None, "Player 5")
+    game.Player(game, None, "Player 6")
+    assert game.is_valid_num_of_players() is True # 6 Players
+
+    game.Player(game, None, "Player 7")
+    assert game.is_valid_num_of_players() is False  # 7 Players
+
 
 def test_score_action():
     game = mantis_logic.Mantis()

@@ -49,6 +49,8 @@ NUM_OF_POSSIBLE_COLOURS_PER_CARD = 3
 DECK_SIZE = 105
 STARTING_TANK_SIZE = 4
 DEFAULT_GOAL = 10
+MIN_PLAYERS = 2
+MAX_PLAYERS = 6
 
 
 class Mantis:
@@ -72,7 +74,12 @@ class Mantis:
             card.colour = possible_colours[0]
         return card
 
+    def is_valid_num_of_players(self) -> bool:
+        number_of_players = len(self.players)
+        return MIN_PLAYERS <= number_of_players <= MAX_PLAYERS
+
     def start_game(self):
+        assert self.is_valid_num_of_players()
         self.shuffle_deck()
         self.deal_cards()
 
